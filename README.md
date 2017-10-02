@@ -317,14 +317,49 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
   </head>
   <body>
     <header>
-      <h1>SOCIAL NETWORK</h1>
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">NAVEGACIÓN</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{path("app_homepage")}}">
+            <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
+              NETWORK
+            </a>
+          </div>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li>
+                <a href="{{path("login")}}">
+                  <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                  &nbsp;
+                  Entrar
+                </a>
+              </li>
+              <li>
+                <a href="{{path("login")}}">
+                  <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                  &nbsp;
+                  Registro
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </header>
     <section id="content">
     {% block content %}{% endblock%}
     </section>
-    <footer>
+    <footer class="col-lg-12">
       <hr/>
-      <p>SF3 NETWORK </p>
+      <div class="container">
+        <p class="text-muted">SF3 NETWORK </p>
+      </div>
     </footer>
   </body>
 </html>
@@ -339,3 +374,21 @@ En el siguiente ejemplo modificaremos la plantilla que refleja el método `publi
   <body><h1>Página de {{titulo}} </h1></body>
 {% endblock %}
 ```
+
+encoders
+--------
+
+```yml
+# app\config\security.yml
+security:
+    # https://symfony.com/doc/current/security.html
+    # http://symfony.com/doc/current/security/named_encoders.html
+    encoders:
+        BackendBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 4 # Número de veces que se va a encriptar la contraseña
+```
+
+Generaremos un formulario mediante `php bin/console doctrine:generate:form BackendBundle:User`, el cual creará el siguiente archivo **\src\BackendBundle/Form/UserType.php**.
+
+El siguiente paso consistirá en mover **\src\BackendBundle\Form\UserType.php** a **\src\AppBundle\Form\RegisterType.php** y realizar las siguientes modificaciones:

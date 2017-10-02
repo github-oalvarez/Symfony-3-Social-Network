@@ -57,6 +57,23 @@ class User
      */
     private $image;
 
+/* INTRODUCIMOS LOS SIGUIENTES MÉTODOS */
+    public function getUsername(){
+        return $this->email;
+    }
+    public function getSalt(){
+      return null;
+    }
+    public function getRoles(){
+      return $this->getRole();
+    }
+    public function eraseCredentials(){
+
+    }
+    public function __toString(){
+      return $this->name;
+    }
+/****************************************/
 
     /**
      * Get id
@@ -284,4 +301,3 @@ class User
         return $this->image;
     }
 }
-
