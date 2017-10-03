@@ -1,4 +1,29 @@
 {% extends "AppBundle:Layouts:layout.html.twig"%}
 {% block content %}
-  <body><h1>Página de {{titulo}} </h1></body>
+  <div class="col-lg-4 box-form">
+    <h2>Identificarse</h2>
+    <hr/>
+    {% if is_granted ('ROLE_USER') %}
+        {{ dump(app.user) }}
+    {% endif %}
+    {% if last_username is defined %}
+        {{ last_username }}
+    {% endif %}
+
+    <form action="{{path('login_check')}}" method="POST">
+        <label>Email</label>
+        <input type="email" id="username" name="_username"
+            value="
+                {% if last_username is defined %}
+                    {{ last_username }}
+                {% endif %}
+            " class="form-control" />
+        <label>Contraseña</label>
+        <input type="password" id="password" name="_password" class="form-control" />
+        <input type="submit" value="Entrar" class="btn btn-success" />
+        {# Mediante el input Type="hidden" definimos el nombre del "target_path" al que nos
+        queremos dirigir después de enviar el formulario #}
+        <input type="hidden" name="target_path" value="home" />
+    </form>
+  </div>
 {% endblock %}

@@ -62,10 +62,7 @@ class RegisterType extends AbstractType
               "class"=>"form-submit btn btn-success"
             )
           ));
-//          ->add('role')
-//          ->add('bio')
-//          ->add('active')
-//          ->add('image');
+//          ->add('role')->add('bio')->add('active')->add('image');
     }
 
     /**

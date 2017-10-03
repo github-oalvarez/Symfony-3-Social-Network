@@ -13,7 +13,6 @@ class PublicationController extends Controller
      */
     public function indexAction(Request $request)
     {
-        echo "Publication USer";
-        die();
+      return $this->render('AppBundle:Publication:home.html.twig');
     }
 }
