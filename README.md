@@ -1,8 +1,8 @@
 RED SOCIAL SYMFONY 3
 ====================
 
-Instalación previa
-------------------
+1.Instalación previa
+====================
 
 Instalamos composer en consola `composer create-project symfony/framework-standard-edition curso_social_network`.
 Seleccionamos **database_name (symfony): curso_social_network** durante la instalación.
@@ -100,13 +100,15 @@ CONSTRAINT fk_notifications_users FOREIGN KEY(user_id) references users(id)
 
 ---------------------------------------------------------------------------------------------------
 
-Requerimos instalar además de composer básico los siguientes componentes mediante la terminal:
+Requerimos además de la instalación básica de instalar además de [Composer](https://getcomposer.org/) los siguientes componentes, que añadirán mediante la terminal:
     * `composer require doctrine/doctrine-cache-bundle`.
     * `composer require incenteev/composer-parameter-handler`.
     * `composer require knplabs/knp-paginator-bundle`.
 
-Actualizamos composer con los paquetes nuevos usando `composer update`.
-Creamos el primer Bundle `php bin/console generate:bundle`.
+2.Creación de BackendBundle
+===========================
+
+Actualizamos composer con los paquetes nuevos usando `composer update`, para a continuación crear el *Bundle* **BackendBundle**, mediante el comando de consola: `php bin/console generate:bundle`.
 
 | Are you planning on sharing this bundle across multiple applications?           | [no]: no       |
 |:--------------------------------------------------------------------------------|----------------|
@@ -153,11 +155,14 @@ y lo sustituimos por:
 
 Si queremos generar una nueva entidad usaremos `php bin/console doctrine:generate:entity`
 
-*Nota*: Si previamente ya subimos la base de datos al servidor (como en este caso) y queremos importar su configuración a nuestro bundle, **BackendBundle** usaremos `php bin/console doctrine:mapping:import BackendBundle yml`.
+*Nota*: Si previamente ya subimos la base de datos al servidor (como en este caso) y queremos importar su configuración a nuestro bundle, **BackendBundle** usaremos `php bin/console doctrine:mapping:import BackendBundle yml` (Así mapearemos la base de datos y crearemos nuestra entidad en Symfony).
 
 ---------------------------------------------------------------------------------------------------
 
-**IMPORTANTE** cambiamos los nombres de las configuraciones de la base de datos de plural a singular, así:
+2.1.Modificando BackendBundle
+-----------------------------
+
+**IMPORTANTE** se recomienda los nombres de las configuraciones de la base de datos de plural a singular, así:
 
 * **Likes.orm.yml** -> **Like.orm.yml**
 * **Notifications.orm.yml** -> **Notification.orm.yml**
@@ -165,14 +170,13 @@ Si queremos generar una nueva entidad usaremos `php bin/console doctrine:generat
 * **Publications.orm.yml** -> **Publication.orm.yml**
 * **Users.orm.yml** -> **User.orm.yml**
 
-Dentro del archivo **Like.orm.yml** (y el resto de archivos, incluido **src\BackendBundle\Entity\Following.php**) cambiamos el nombre de la entidad para que sea singular, y las relaciones existentes interiormente con las demás también.
+Además de dentro del archivo **Like.orm.yml** (y el resto de archivos, incluido **src\BackendBundle\Entity\Following.php**) cambiar el nombre de la entidad para que sea singular, y las relaciones existentes interiormente con las demás también.
 
-Lanzaremos el comando `php bin/console doctrine:generate:entities BackendBundle` para generar / actualizar las entidades
-Posteriormente `php bin/console doctrine:schema:update --force` para actualizar la Base de Datos según la entidades generada.
+Lanzaremos el comando `php bin/console doctrine:generate:entities BackendBundle` para generar / actualizar las entidades, y posteriormente `php bin/console doctrine:schema:update --force` para actualizar la Base de Datos según la entidades generada.
 
 *Nota*: Si diera el fallo **[RuntimeException] Bundle "BackendBundle" does not contain any mapped entities.**, probamos a actualizar composer mediante `composer update` y repetimos `php bin/console doctrine:generate:entities BackendBundle`.
 
-Se habrán generado:
+Así, se habrán generado:
 * **src\BackendBundle\Entity\Like.php**
 * **src\BackendBundle\Entity\Notification.php**
 * **src\BackendBundle\Entity\PrivateMessage.php**
@@ -180,10 +184,10 @@ Se habrán generado:
 * **src\BackendBundle\Entity\User.php**
 * **src\BackendBundle\Entity\Following.php**
 
-¿Cómo gestionaremos los controladores?
---------------------------------------
+2.2.¿Cómo gestionaremos los controladores?
+------------------------------------------
 
-Crearemos los controladores **src\AppBundle\Controller\UserController.php** y **src\AppBundle\Controller\PublicationController.php**, con el siguiente contenido base:
+Crearemos los controladores **src\AppBundle\Controller\UserController.php** y **src\AppBundle\Controller\PublicationController.php** (dentro ambos de AppBundle), con el siguiente contenido base (extraido de **DefaultController.php**):
 
 ```php
 <?php
@@ -229,10 +233,10 @@ class UserController extends Controller
 }
 ```
 
-¿Cómo gestionaremos el sistema de enrutado?
--------------------------------------------
+3.Sistema de enrutado
+=====================
 
-Usaremos el sistema **yml** para así poder gestionar los enrutados de una manera más sencilla a gran escala.
+Usaremos el sistema **yml** para así poder gestionar los enrutados de una manera más sencilla, manteniendo la posibilidad de escalar de manera sencilla la aplicación.
 
 * **app\config\routing.yml** indicará dónde se encuentra el enrutador de nuestro proyecto `resource: '@AppBundle/Resources/config/routing.yml'` así como su prefijo `prefix:   /`.
 
@@ -243,10 +247,14 @@ app:
     prefix:   /
 ```
 
-* **src\AppBunlde\Resources\config\routing.yml** indicará dónde se encuentra el enrutador de cada una de las funcionalidades **app_user** (`resource: '@AppBundle/Resources/config/routing/user.yml'`)y **app_publication** (`resource: '@AppBundle/Resources/config/routing/publication.yml'`), además de su correspodiente prefijo `prefix:   /`.
+* **src\AppBunlde\Resources\config\routing.yml** a su vez indicará la ubicación del enrutador de cada una de las funcionalidades **app_user** (`resource: '@AppBundle/Resources/config/routing/user.yml'`) y **app_publication** (`resource: '@AppBundle/Resources/config/routing/publication.yml'`), además de su correspodiente prefijo `prefix:   /` (que en este caso será nulo).
 
 ```yml
 # src\AppBunlde\Resources\config\routing.yml
+app_homepage:
+    path: /
+    defaults: { _controller: AppBundle:Default:index }
+
 app_user:
     resource: '@AppBundle/Resources/config/routing/user.yml'
     prefix:   /
@@ -254,10 +262,6 @@ app_user:
 app_publication:
     resource: '@AppBundle/Resources/config/routing/publication.yml'
     prefix:   /
-
-home_page:
-    path: /
-    defaults: { _controller: AppBundle:User:login }
 ```
 
 * **src\AppBunlde\Resources\config\routing\user.yml** y **src\AppBunlde\Resources\config\routing\publication.yml**, son los enrutadores específicos.
@@ -267,15 +271,16 @@ home_page:
 login:
     path: /login
     defaults: { _controller: AppBundle:User:login }
-
+´´´
+´´ýml
 # src\AppBunlde\Resources\config\routing\publication.yml
 home_publication:
     path: /home
     defaults: { _controller: AppBundle:Publication:index }
 ```
 
-¿Cómo gestionaremos el sistema de vistas?
------------------------------------------
+4.Sistema de Vistas
+===================
 
 Para referenciar la plantilla tomaremos como ejemplo el método `public function loginAction(Request $request)`, dentro del controlador **src\AppBundle\controller\UserController.php**.
 
@@ -287,16 +292,17 @@ Para referenciar la plantilla tomaremos como ejemplo el método `public function
     }
 ```
 
-Nuestra plantilla **src\AppBundle\Resources\views\login.html.twig** será:
+Nuestra plantilla **src\AppBundle\Resources\views\login.html.twig**, tendrá que contener un `<body></body>` que incluya el contenido en su interior para que se muestre la barra de **debbug** de Symfony, tal que así:
 
 ```twig
 {# src\AppBundle\Resources\views\login.html.twig #}
-<body><h1>Página de {{titulo}} </h1></body>
+<body> <h1>Página de {{titulo}} </h1> </body>
 ```
 
-Extender vistas
----------------
-Para extender las vistas podemos usar tanto la base predefinida dentro de la instalación básica de symfony en **app\Resources\views\base.html.twig**, como creando nuestra propia plantilla base como en el siguiente ejemplo:
+4.1.Extender vistas
+-------------------
+
+Para extender las vistas podemos usar tanto la base predefinida dentro de la instalación básica de symfony en **app\Resources\views\base.html.twig**, como creando nuestra propia plantilla base ( **src\AppBundle\Resources\views\Layouts\layout.html.twig** ) como es nuestro caso.
 
 ```twig
 {# src\AppBundle\Resources\views\Layouts\layout.html.twig #}
@@ -365,7 +371,7 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
 </html>
 ```
 
-En el siguiente ejemplo modificaremos la plantilla que refleja el método `public function loginAction(Request $request)` dentro de **src\AppBundle\Controller\UserController.php**.
+El siguiente paso consistirá en extender la plantilla **src\AppBundle\Resources\views\login.html.twig** a partir de **src\AppBundle\Resources\views\Layouts\layout.html.twig** mediante `{% extends "AppBundle:Layouts:layout.html.twig"%}`. 
 
 ```twig
 {# src\AppBundle\Resources\views\login.html.twig #}
@@ -375,8 +381,15 @@ En el siguiente ejemplo modificaremos la plantilla que refleja el método `publi
 {% endblock %}
 ```
 
-encoders
---------
+En el ejemplo anterior modificamos la plantilla que refleja el método `public function loginAction(Request $request)` dentro de **src\AppBundle\Controller\UserController.php**.
+
+5.Seguridad
+===========
+
+5.1.Encoders
+------------
+
+Para el uso el método de registro y logueo vamos a usar un sistema de encriptación bajo **bycrypt**, el cual definiremos dentro de **app\config\security.yml**, indicando además el número de veces que se va a encriptar la contraseña. 
 
 ```yml
 # app\config\security.yml
@@ -389,6 +402,122 @@ security:
             cost: 4 # Número de veces que se va a encriptar la contraseña
 ```
 
-Generaremos un formulario mediante `php bin/console doctrine:generate:form BackendBundle:User`, el cual creará el siguiente archivo **\src\BackendBundle/Form/UserType.php**.
+6.Sistema de Registro
+=====================
 
-El siguiente paso consistirá en mover **\src\BackendBundle\Form\UserType.php** a **\src\AppBundle\Form\RegisterType.php** y realizar las siguientes modificaciones:
+Generaremos un formulario mediante `php bin/console doctrine:generate:form BackendBundle:User`, creandose el siguiente archivo **\src\BackendBundle/Form/UserType.php**.
+
+El siguiente paso consistirá en mover **\src\BackendBundle\Form\UserType.php** a **\src\AppBundle\Form\RegisterType.php**, para centralizar los formularios dentro del *Bundle* **AppBundle** (Además cambiamos el nombre de **UserType** a **RegisterType**). Posteriormente se realizará las siguientes modificaciones:
+
+6.1.Definiendo el Formulario de Registro
+----------------------------------------
+
+* Cambiar en **namespace** de  namespace **BackendBundle\Form;** a **namespace AppBundle\Form;**
+
+```php
+// namespace BackendBundle\Form;
+/* Cambiamos el namespace al cambiar el Bundle                     */
+namespace AppBundle\Form;
+```
+
+* Incluiremos las librerías de *componentes* de *Symfony* que nos permitirán usar los tipos de datos de entrada del formulario.
+
+```php
+/* Añadimos los componentes que permitirán el uso de nuevas clases */
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+/*******************************************************************/
+```
+
+* Eliminamos las entradas del fromulario que no queremos que aparezcan (`->add('role')->add('bio')->add('active')->add('image');`), modificamos cada entrada al formulario (que si queremos que aparezcan) indicando sus características y añadimos una nueva entrada **SubmitType**.
+
+Como no hemos modifcado la ubicación de las entidades no habrá que modificar el método `public function configureOptions(OptionsResolver $resolver)`.
+
+Finalmente el archivo **src\AppBundle\Form\RegisterType.php** quedará así:
+
+```php
+// src\AppBundle\Form\RegisterType.php
+<?php
+// namespace BackendBundle\Form;
+/* Cambiamos el namespace al cambiar el Bundle                     */
+namespace AppBundle\Form;
+/*******************************************************************/
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+/* Añadimos los componentes que permitirán el uso de nuevas clases */
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+/*******************************************************************/
+class RegisterType extends AbstractType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+          ->add('name', TextType::class, array(
+            'label'=>'Nombre',
+            'required'=>'required',
+            'attr'=>array(
+              'class'=>'form-name form-control'
+            )
+          ))
+          ->add('surname', TextType::class, array(
+            'label'=>'Apellido',
+            'required'=>'required',
+            'attr'=>array(
+              'class'=>'form-surname form-control'
+            )
+          ))
+          ->add('nick', TextType::class, array(
+            'label'=>'Nick',
+            'required'=>'required',
+            'attr'=>array(
+              'class'=>'form-nick form-control nick-input'
+            )
+          ))
+          ->add('email', EmailType::class, array(
+            'label'=>'Correo electrónico',
+            'required'=>'required',
+            'attr'=>array(
+              'class'=>'form-email form-control'
+            )
+          ))
+          ->add('password', PasswordType::class, array(
+            'label'=>'Contraseña',
+            'required'=>'required',
+            'attr'=>array(
+              'class'=>'form-password form-control'
+            )
+          ))
+          ->add('Registrarse',SubmitType::class, array(
+            "attr"=>array(
+              "class"=>"form-submit btn btn-success"
+            )
+          ));
+//          ->add('role')->add('bio')->add('active')->add('image');
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'BackendBundle\Entity\User'
+        ));
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'backendbundle_user';
+    }
+}
+```
