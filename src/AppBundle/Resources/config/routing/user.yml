@@ -12,7 +12,13 @@ register:
     path: /register
     defaults: { _controller: AppBundle:User:register }
 
+# ROUTING PARA CONSULTA AJAX (¿EXISTE EL NICK DE REGISTRO?)
 user_nick_test:
     path: /nick-test
     defaults: { _controller: AppBundle:User:nickTest }
     methods: [POST]
+
+# ROUTING PARA CONFIGURACIÓN PERFIL DE Usuario
+user_edit:
+    path: /my-data
+    defaults: { _controller: AppBundle:User:editUser }

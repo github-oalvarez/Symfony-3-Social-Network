@@ -2,6 +2,23 @@
 body{
   backgorund: #eee;
 }
+/* HEADER */
+.navbar-collapse .avatar{
+  backgorund:white;
+  border-radius:500px;
+  width:30px;
+  height: 30px;
+  overflow: hidden;
+  float: left;
+  margin-right:12px;
+  margin-top:-5px;
+}
+
+.navbar-collapse .avatar img{
+  height: 100%;
+  text-align: center;
+}
+
 /* REGISTRO */
 .box-form{
   backgorund:white;

@@ -1,8 +1,8 @@
 {% extends "AppBundle:Layouts:layout.html.twig"%}
-{% block javascript %}
+{% block javascripts %}
   {# la función parent() carga todo el contenido del bloque anterior #}
   {{ parent() }}
-  <script src="{{ asset('assets/js/custom/nick-test.js')}}"></script>
+  <script src="{{ asset('assets/js/custom/nick-test.js') }}"></script>
 {% endblock %}
 {% block content %}
   <div class="col-lg-8 box-form">
