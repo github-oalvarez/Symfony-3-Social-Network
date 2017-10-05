@@ -364,6 +364,40 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
                 </a>
               </li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <div class="avatar">
+                      {# Imagen de usuario si existe un registro o no de la imagen #}
+                      {% if app.user.image == null %}
+                        <img src="{{ asset ('assets/images/default.png') }}" />
+                      {% else %}
+                        <img src="{{ asset ('uploads/users/'~app.user.image) }}" />
+                      {% endif %}
+                    </div>
+                    {{app.user.name}} {{app.user.surname}}
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="{{path("user_edit")}}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true">
+                        </span>&nbsp;Mi Perfil
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{path("user_edit")}}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;Mis datos</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                      <a href="{{ path("logout") }}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Salir</a>
+                    </li>
+                    <li>
+                      <a href="{{ path("logout") }}"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;Ayuda</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
           </div>
         </div>
       </nav>
@@ -755,7 +789,7 @@ Para mostrarlo lo ubicaremos dentro de la plantilla base **src\AppBundle\Resourc
     }
 ```
 
-* Añadimos el componente `use Symfony\Component\HttpFoundation\Response;` para habilitar el uso del método **response**.
+* Añadimos dentro de **src\AppBundle\Controller\UserController.php** el componente `use Symfony\Component\HttpFoundation\Response;` para habilitar el uso del método **response**.
 
 ```php
 /* Añadimos los componentes que permitirán el uso de nuevas clases ************************/
@@ -805,8 +839,8 @@ y cuando salgamos de él (.blur) actuamos */
 Para la Vista del sistema de Registro, usaremos la plantilla **src/AppBundle/Resources/views/User/register.html.twig**.
 
 ```twig
-{# EXTRACTO DE CÓDIGO     #}
 {# src/AppBundle/Resources/views/User/register.html.twig #}
+{# EXTRACTO DE CÓDIGO     #}
 {% extends "AppBundle:Layouts:layout.html.twig"%}
 {# FIN DE EXTRACTO        #}
 {# Ampliamos el bloque de JavaScript con el script 'nick-test.js'    #}
@@ -836,50 +870,176 @@ logout:
     path: /logout
 ```
 
-4.1.Controlador y Método de Login
+5.1.Controlador y Método de Login
 ---------------------------------
 
+* Modificamos el controlador **src\AppBundle\Controller\UserController.php** para añadir el siguiente método `public function loginAction(Request $request){}`.
 
-
-
-
-
-* Creamos el controlador **src\AppBundle\Controller\UserController.php** con la estructura básica siguiente:
 ```php
-<?php
-namespace AppBundle\Controller;
-
-/* Componentes necesarios iniciales *******************************************************/
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-/******************************************************************************************/
+// src\AppBundle\Controller\UserController.php
+/* EXTRACTO DE CÓDIGO *********************************************************************/
 class UserController extends Controller
 {
-    public function indexAction(Request $request)
+/* FIN DE EXTRACTO ************************************************************************/
+/* MÉTODO PARA EL LOGIN DE USUARIO ********************************************************/
+public function loginAction(Request $request)
     {
-        // indicamos la vista
-        return $this->render('AppBundle:User:index.html.twig');
+        /* si existe el objeto User nos rediriges a home            */
+        if( is_object($this->getUser()) ){
+          return $this->redirect('home');
+        }
+        /************************************************************/
+        $authenticationUtils = $this->get('security.authentication_utils');
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+        return $this->render('AppBundle:User:login.html.twig', array(
+            'lastUsername'=>$lastUsername,
+            'error'=>$error ));
     }
-}
 ```
 
+5.2.Vista de Registro
+---------------------
 
+Para la Vista del **sistema de Login**, usaremos la plantilla **src/AppBundle/Resources/views/User/login.html.twig**.
 
+```twig
+{# src/AppBundle/Resources/views/User/login.html.twig #}
+{% extends "AppBundle:Layouts:layout.html.twig"%}
+{% block content %}
+  <div class="col-lg-4 box-form">
+    <h2>Identificarse</h2>
+    <hr/>
+    {% if is_granted ('ROLE_USER') %}
+        {{ dump(app.user) }}
+    {% endif %}
+    {% if last_username is defined %}
+        {{ last_username }}
+    {% endif %}
 
+    <form action="{{path('login_check')}}" method="POST">
+        <label>Email</label>
+        <input type="email" id="username" name="_username"
+            value="
+                {% if last_username is defined %}
+                    {{ last_username }}
+                {% endif %}
+            " class="form-control" />
+        <label>Contraseña</label>
+        <input type="password" id="password" name="_password" class="form-control" />
+        <input type="submit" value="Entrar" class="btn btn-success" />
+        {# Mediante el input Type="hidden" definimos el nombre del "target_path" al que nos
+        queremos dirigir después de enviar el formulario #}
+        <input type="hidden" name="target_path" value="home" />
+    </form>
+  </div>
+{% endblock %}
+```
 
+5.3.Redirección Logueo
+----------------------
 
+Para evitar el uso de la url **/register** y **/login**, colocaremos un redireccionamiento al principio de cada uno de estos métodos:
 
+```php
+// src\AppBundle\Controller\UserController.php
+/* EXTRACTO DE CÓDIGO *********************************************************************/
+    public function loginAction(Request $request)
+    {
+/* FIN DE EXTRACTO ************************************************************************/    
+        /* si existe el objeto User nos rediriges a home            */
+        if( is_object($this->getUser()) ){
+          return $this->redirect('home');
+        }
+        /************************************************************/
+```
 
+```php
+// src\AppBundle\Controller\UserController.php
+/* EXTRACTO DE CÓDIGO *********************************************************************/
+    public function registerAction(Request $request)
+    {
+/* FIN DE EXTRACTO ************************************************************************/    
+        /* si existe el objeto User nos rediriges a home            */
+        if( is_object($this->getUser()) ){
+          return $this->redirect('home');
+        }
+        /************************************************************/
+```
 
+5.4.Ocultar Parte del Menú Según Logueo
+---------------------------------------
 
+Para evitar la visualización dentro de menú de la opción de **login** y **registro** cuando se está logueado, y **Mi Perfil**, **Mis Datos**, **Salir** y **Ayuda** cuando no se está logueado, incluiremos esa parte de plantilla dentro del condicional siguiente:
+```twig
+{# Cuando SI se está logueado #}
+{% if app.user == null %}
+{% endif %}
+```
 
+```twig
+{# Cuando NO se está logueado #}
+{% if app.user != null %}
+{% endif %}
+```
 
-
-
-
-
-
+Quedando así:
+```twig
+{# src/AppBundle/Resources/views/User/login.html.twig #}
+{# Evitamos que se vea esta parte del menú cuando NO estamos logueados #}
+{% if app.user == null %}
+   <li>
+      <a href="{{path("login")}}">
+      <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Entrar
+      </a>
+   </li>
+   <li>
+       <a href="{{path("register")}}">
+       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Registro
+       </a>
+   </li>
+{% endif %}
+```
+```twig
+{# src/AppBundle/Resources/views/User/login.html.twig #}
+{# Evitamos que se vea esta parte del menú cuando estamos logueados #}
+{% if app.user != null %}
+<ul class="nav navbar-nav navbar-right">
+   <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+      <div class="avatar">
+      {# Imagen de usuario si existe un registro o no de la imagen #}
+      {% if app.user.image == null %}
+         <img src="{{ asset ('assets/images/default.png') }}" />
+      {% else %}
+         <img src="{{ asset ('uploads/users/'~app.user.image) }}" />
+      {% endif %}
+      </div>
+      {{app.user.name}} {{app.user.surname}}
+         <span class="caret"></span>
+         </a>
+         <ul class="dropdown-menu">
+            <li>
+               <a href="{{path("user_edit")}}">
+                  <span class="glyphicon glyphicon-user" aria-hidden="true">
+                  </span>&nbsp;Mi Perfil
+               </a>
+            </li>
+            <li>
+               <a href="{{path("user_edit")}}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;Mis datos</a>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li>
+               <a href="{{ path("logout") }}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Salir</a>
+            </li>
+            <li>
+               <a href="{{ path("logout") }}"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp;Ayuda</a>
+            </li>
+        </ul>
+     </li>
+  </ul>
+{% endif %}
+```
 
 
 6.Session
@@ -914,4 +1074,14 @@ class UserController extends Controller
       $this->session = new Session();
     }
 /*******************************************************************/
+```
+
+Sustituimos la imagen predefinida `<img src="{{ asset ('assets/images/default.png') }}" />`por el siguiente código:
+```twig
+      {# Imagen de usuario si existe un registro o no de la imagen #}
+      {% if app.user.image == null %}
+         <img src="{{ asset ('assets/images/default.png') }}" />
+      {% else %}
+         <img src="{{ asset ('uploads/users/'~app.user.image) }}" />
+      {% endif %}
 ```
