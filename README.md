@@ -610,7 +610,7 @@ use AppBundle\Form\RegisterType;                         // Da acceso al Formula
 
 ```php
 // src\AppBundle\Controller\UserController.php
-/* EXTRACTO DE CÓDIGO *********************************************************************/
+/* EXTRACTO DE CÓDIGO EXISTENTE ***********************************************************/
 class UserController extends Controller
 {
 /* FIN DE EXTRACTO ************************************************************************/
@@ -713,7 +713,7 @@ Quedaría nuestro código así:
 
 ```php
 // src\AppBundle\Controller\UserController.php
-/* EXTRACTO DE CÓDIGO *********************************************************************/
+/* EXTRACTO DE CÓDIGO EXISTENTE ***********************************************************/
                 }else{
                   // si el usuario existe
                   $status = "El usuario ya existe!!";
@@ -728,7 +728,7 @@ Quedaría nuestro código así:
 ```
 ```php
 // src\AppBundle\Controller\UserController.php
-/* EXTRACTO DE CÓDIGO *********************************************************************/
+/* EXTRACTO DE CÓDIGO EXISTENTE ***********************************************************/
                     $flush = $em->flush();
                     // Si se guardan correctamente los datos en la BD
                     if($flush == null){
@@ -877,7 +877,7 @@ logout:
 
 ```php
 // src\AppBundle\Controller\UserController.php
-/* EXTRACTO DE CÓDIGO *********************************************************************/
+/* EXTRACTO DE CÓDIGO EXISTENTE ***********************************************************/
 class UserController extends Controller
 {
 /* FIN DE EXTRACTO ************************************************************************/
@@ -943,7 +943,7 @@ Para evitar el uso de la url **/register** y **/login**, colocaremos un redirecc
 
 ```php
 // src\AppBundle\Controller\UserController.php
-/* EXTRACTO DE CÓDIGO *********************************************************************/
+/* EXTRACTO DE CÓDIGO EXISTENTE ***********************************************************/
     public function loginAction(Request $request)
     {
 /* FIN DE EXTRACTO ************************************************************************/    
@@ -956,7 +956,7 @@ Para evitar el uso de la url **/register** y **/login**, colocaremos un redirecc
 
 ```php
 // src\AppBundle\Controller\UserController.php
-/* EXTRACTO DE CÓDIGO *********************************************************************/
+/* EXTRACTO DE CÓDIGO EXISTENTE ***********************************************************/
     public function registerAction(Request $request)
     {
 /* FIN DE EXTRACTO ************************************************************************/    
@@ -1008,12 +1008,7 @@ Quedando así:
    <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
       <div class="avatar">
-      {# Imagen de usuario si existe un registro o no de la imagen #}
-      {% if app.user.image == null %}
          <img src="{{ asset ('assets/images/default.png') }}" />
-      {% else %}
-         <img src="{{ asset ('uploads/users/'~app.user.image) }}" />
-      {% endif %}
       </div>
       {{app.user.name}} {{app.user.surname}}
          <span class="caret"></span>
@@ -1057,7 +1052,7 @@ y la variable `private $session;` junto al método `public function __construct(
 
 ```php
 // src\AppBundle\Controller\UserController.php
-/* EXTRACTO DE CÓDIGO *********************************************************************/
+/* EXTRACTO DE CÓDIGO EXISTENTE ***********************************************************/
 class UserController extends Controller
 {
 /* FIN DE EXTRACTO ************************************************************************/
