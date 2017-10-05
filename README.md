@@ -336,7 +336,11 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
     <header>
       <nav class="navbar navbar-inverse">
         <div class="container-fluid">
+<<<<<<< HEAD
           {# LOGO #}
+=======
+          {# LOGO #} 
+>>>>>>> master
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
               <span class="sr-only">NAVEGACIÓN</span>
@@ -344,7 +348,11 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
+<<<<<<< HEAD
 
+=======
+           
+>>>>>>> master
             <a class="navbar-brand" href="{{path("app_homepage")}}">
             <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
               NETWORK
@@ -352,7 +360,11 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
           </div>
           {# LOGO #}
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<<<<<<< HEAD
             {# MENÚ LOGIN + REGISTRO #}
+=======
+            {# MENÚ LOGIN + REGISTRO #} 
+>>>>>>> master
             <ul class="nav navbar-nav">
               <li>
                 <a href="{{path("login")}}">
@@ -369,8 +381,13 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
                 </a>
               </li>
             </ul>
+<<<<<<< HEAD
             {# MENÚ LOGIN + REGISTRO #}
             {# MENÚ USUARIO #}
+=======
+            {# MENÚ LOGIN + REGISTRO #} 
+            {# MENÚ USUARIO #} 
+>>>>>>> master
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -405,7 +422,11 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
                   </ul>
                 </li>
               </ul>
+<<<<<<< HEAD
             {# MENÚ USUARIO #}
+=======
+            {# MENÚ USUARIO #} 
+>>>>>>> master
           </div>
         </div>
       </nav>
@@ -423,7 +444,11 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
 </html>
 ```
 
+<<<<<<< HEAD
 El siguiente paso consistirá en extender la plantilla **src\AppBundle\Resources\views\index.html.twig** a partir de **src\AppBundle\Resources\views\Layouts\layout.html.twig** mediante `{% extends "AppBundle:Layouts:layout.html.twig"%}`.
+=======
+El siguiente paso consistirá en extender la plantilla **src\AppBundle\Resources\views\index.html.twig** a partir de **src\AppBundle\Resources\views\Layouts\layout.html.twig** mediante `{% extends "AppBundle:Layouts:layout.html.twig"%}`. 
+>>>>>>> master
 
 ```twig
 {# src\AppBundle\Resources\views\index.html.twig #}
@@ -441,7 +466,11 @@ En el ejemplo anterior modificamos la plantilla que refleja el método `public f
 3.1.Encoders
 ------------
 
+<<<<<<< HEAD
 Para el método de registro y logueo vamos a usar un sistema de encriptación bajo **bycrypt**, el cual definiremos dentro de **app\config\security.yml**, indicando además el número de veces que se va a encriptar la contraseña.
+=======
+Para el método de registro y logueo vamos a usar un sistema de encriptación bajo **bycrypt**, el cual definiremos dentro de **app\config\security.yml**, indicando además el número de veces que se va a encriptar la contraseña. 
+>>>>>>> master
 
 ```yml
 # app\config\security.yml
@@ -1107,3 +1136,7 @@ Sustituimos la imagen predefinida `<img src="{{ asset ('assets/images/default.pn
 
 7.Editar Usuario
 ================
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
