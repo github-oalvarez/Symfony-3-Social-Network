@@ -690,6 +690,8 @@ class UserController extends Controller
 4.3.Sistema de Validación de Registro
 -------------------------------------
 
+*Nota*: El formato **yml** suele ser problemático, para testear su escritura correcta usar "[yamllint.com](http://www.yamllint.com/)"
+
 ```yml
 # src\AppBundle\Resources\config\validation.yml
 BackendBundle\Entity\User:
@@ -698,7 +700,7 @@ BackendBundle\Entity\User:
             - NotBlank: {message: "El nombre no puede estar vacío"}
             - Type:
                 type: string
-                message: "El nambre tiene que ser cadena"ç
+                message: "El nambre tiene que ser cadena"
             - Length:
                 min: 3
                 minMessage: "El titulo debe tener mas de dos caracteres"
@@ -709,7 +711,7 @@ BackendBundle\Entity\User:
         email:
             - NotBlank: {message: "El email no puede estar vacío"}
             - Email:
-                message: "El email {{ value }} no es válido".
+                message: "El email {{ value }} no es válido"
                 checkMX: true
 ```
 
