@@ -7,14 +7,16 @@
       <link href="{{ asset ('assets/bootstrap/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet">
       <link href="{{ asset ('assets/css/bootstrap.cosmo.min.css')}}" type="text/css" rel="stylesheet">
       <link href="{{ asset ('assets/css/styles.css')}}" type="text/css" rel="stylesheet">
-    {% endblock%}
+    {% endblock %}
     {% block javascripts %}
       <script type="text/javascript">
         var URL="{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php"
       </script>
       <script src="{{ asset ('assets/js/jquery.min.js')}}"></script>
       <script src="{{ asset ('assets/bootstrap/js/bootstrap.min.js')}}"></script>
-    {% endblock%}
+      <!-- Permite usar el Scroll infinito de carga en un listado-->
+      <script src="{{ asset ('assets/js/jquery-ias.min.js')}}"></script>
+    {% endblock %}
   </head>
   <body>
     <header>
@@ -49,6 +51,32 @@
                     &nbsp;
                     Registro
                   </a>
+                </li>
+              {% else %}
+                <li>
+                  <a href="{{path("app_homepage")}}">
+                  <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                    &nbsp;
+                    Inicio
+                  </a>
+                </li>
+                <li>
+                  <a href="{{path("user_list")}}">
+                  <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                    &nbsp;
+                    Gente
+                  </a>
+                </li>
+                {# Buscador de Usuarios #}
+                <li>
+                  <form action="{{ path('user_search') }}" class="navbar-form navbar-left">
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Buscar gente" name="search">
+                    </div>
+                    <button type="submit" class="btn btn-default">
+                      <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                  </form>
                 </li>
               {% endif %}
             </ul>

@@ -201,7 +201,51 @@ class UserController extends Controller{
       return $this->render('AppBundle:User:editUser.html.twig', array(
         "form"=>$form->createView()
       ));
+    }
+    /* MÉTODO PARA LISTAR USUARIOS */
+    public function usersAction(Request $request){
+      /* si existe el objeto User nos rediriges a home            */
+      if( !is_object($this->getUser()) ){
+        return $this->redirect('home');
+      }
+      /************************************************************/
+      $em = $this->getDoctrine()->getManager();
+      $dql = "SELECT u FROM BackendBundle:User u ORDER BY u.id ASC";
+      $query = $em->createQuery($dql);
+      $paginator = $this->get('knp_paginator');
+      $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page',1),
+        5 );
+      return $this->render('AppBundle:User:users.html.twig', array('pagination'=>$pagination));
+    }
 
+    public function searchAction(Request $request){
+      /* si existe el objeto User nos rediriges a home            */
+      if( !is_object($this->getUser()) ){
+        return $this->redirect('home');
+      }
+      /************************************************************/
+      $em = $this->getDoctrine()->getManager();
+      $search = $request->query->get("search", null);
+      if($search==null){
+        return $this->redirect($this->generateURL('home_publications'));
+      }
+      $dql = "SELECT u FROM BackendBundle:User u
+        WHERE u.name LIKE :search
+        OR u.surname LIKE :search
+        OR u.nick LIKE :search
+        ORDER BY u.id ASC";
+      // Buscamos una coincidencia dentro de la base de datos
+      $query = $em->createQuery($dql)->setParameter('search', "%$search%");
+      // Iniciamos el paginador
+      $paginator = $this->get('knp_paginator');
+      $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page',1),
+        5 );
+      // Devolvemos la vista con la información generado por el paginador
+      return $this->render('AppBundle:User:users.html.twig', array('pagination'=>$pagination));
     }
 
 }

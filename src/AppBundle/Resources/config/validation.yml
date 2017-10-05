@@ -1,0 +1,19 @@
+BackendBundle\Entity\User:
+    properties:
+        name:
+            - NotBlank: {message: "El nombre no puede estar vacío"}
+            - Type:
+                type: string
+                message: "El nambre tiene que ser cadena"
+            - Length:
+                min: 3
+                minMessage: "El titulo debe tener más de dos caracteres"
+        surname:
+            - NotBlank: {message: "Los apellidos no pueden estar vacíos"}
+        nick:
+            - NotBlank: {message: "El nick no puede estar vacío"}
+        email:
+            - NotBlank: {message: "El email no puede estar vacío"}
+            - Email:
+                message: "El email {{ value }} no es válido"
+                checkMX: false # evitará el uso de dominios personalizados
