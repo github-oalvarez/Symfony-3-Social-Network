@@ -335,6 +335,7 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
     <header>
       <nav class="navbar navbar-inverse">
         <div class="container-fluid">
+          {# LOGO #} 
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
               <span class="sr-only">NAVEGACIÓN</span>
@@ -342,12 +343,15 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
+           
             <a class="navbar-brand" href="{{path("app_homepage")}}">
             <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
               NETWORK
             </a>
           </div>
+          {# LOGO #}
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            {# MENÚ LOGIN + REGISTRO #} 
             <ul class="nav navbar-nav">
               <li>
                 <a href="{{path("login")}}">
@@ -364,6 +368,8 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
                 </a>
               </li>
             </ul>
+            {# MENÚ LOGIN + REGISTRO #} 
+            {# MENÚ USUARIO #} 
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -398,6 +404,7 @@ Para extender las vistas podemos usar tanto la base predefinida dentro de la ins
                   </ul>
                 </li>
               </ul>
+            {# MENÚ USUARIO #} 
           </div>
         </div>
       </nav>
@@ -884,11 +891,6 @@ class UserController extends Controller
 /* MÉTODO PARA EL LOGIN DE USUARIO ********************************************************/
 public function loginAction(Request $request)
     {
-        /* si existe el objeto User nos rediriges a home            */
-        if( is_object($this->getUser()) ){
-          return $this->redirect('home');
-        }
-        /************************************************************/
         $authenticationUtils = $this->get('security.authentication_utils');
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
@@ -989,14 +991,10 @@ Quedando así:
 {# Evitamos que se vea esta parte del menú cuando NO estamos logueados #}
 {% if app.user == null %}
    <li>
-      <a href="{{path("login")}}">
-      <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Entrar
-      </a>
+      <a href="{{path("login")}}"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Entrar</a>
    </li>
    <li>
-       <a href="{{path("register")}}">
-       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Registro
-       </a>
+       <a href="{{path("register")}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Registro</a>
    </li>
 {% endif %}
 ```
@@ -1015,10 +1013,7 @@ Quedando así:
          </a>
          <ul class="dropdown-menu">
             <li>
-               <a href="{{path("user_edit")}}">
-                  <span class="glyphicon glyphicon-user" aria-hidden="true">
-                  </span>&nbsp;Mi Perfil
-               </a>
+               <a href="{{path("user_edit")}}"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Mi Perfil</a>
             </li>
             <li>
                <a href="{{path("user_edit")}}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;Mis datos</a>
