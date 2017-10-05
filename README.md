@@ -399,7 +399,7 @@ En el ejemplo anterior modificamos la plantilla que refleja el método `public f
 3.1.Encoders
 ------------
 
-Para el uso el método de registro y logueo vamos a usar un sistema de encriptación bajo **bycrypt**, el cual definiremos dentro de **app\config\security.yml**, indicando además el número de veces que se va a encriptar la contraseña. 
+Para el método de registro y logueo vamos a usar un sistema de encriptación bajo **bycrypt**, el cual definiremos dentro de **app\config\security.yml**, indicando además el número de veces que se va a encriptar la contraseña. 
 
 ```yml
 # app\config\security.yml
@@ -415,18 +415,26 @@ security:
 4.Sistema de Registro
 =====================
 
-Generaremos un formulario mediante `php bin/console doctrine:generate:form BackendBundle:User`, creandose el siguiente archivo **\src\BackendBundle/Form/UserType.php**.
-
-El siguiente paso consistirá en mover **\src\BackendBundle\Form\UserType.php** a **\src\AppBundle\Form\RegisterType.php**, para centralizar los formularios dentro del *Bundle* **AppBundle** (Además cambiamos el nombre de **UserType** a **RegisterType**). Posteriormente se realizará las siguientes modificaciones:
+Definiremos el routing dentro de **src/AppBundle/Resources/config/routing/user.yml**:
+```yml
+# ROUTING PARA EL REGISTRO
+register:
+    path: /register
+    defaults: { _controller: AppBundle:User:register }
+```
 
 4.1.Definiendo el Formulario de Registro (RegisterType)
 -------------------------------------------------------
 
+Generaremos un formulario mediante `php bin/console doctrine:generate:form BackendBundle:User`, creandose el siguiente archivo **\src\BackendBundle/Form/UserType.php**.
+
+El siguiente paso consistirá en mover **\src\BackendBundle\Form\UserType.php** a **\src\AppBundle\Form\RegisterType.php**, para centralizar los formularios dentro del *Bundle* **AppBundle** (Además cambiamos el nombre de **UserType** a **RegisterType**). Posteriormente se realizará las siguientes modificaciones:
+
 * Cambiar en **namespace** de  namespace **BackendBundle\Form;** a **namespace AppBundle\Form;**
 
 ```php
+/* Cambiamos el namespace al cambiar el Bundle *********************/
 // namespace BackendBundle\Form;
-/* Cambiamos el namespace al cambiar el Bundle                     */
 namespace AppBundle\Form;
 ```
 
@@ -646,11 +654,6 @@ Para la Vista del sistema de Registro, usaremos la plantilla **src/AppBundle/Res
 ```twig
 {# src/AppBundle/Resources/views/User/register.html.twig #}
 {% extends "AppBundle:Layouts:layout.html.twig"%}
-{% block javascripts %}
-  {# la función parent() carga todo el contenido del bloque anterior #}
-  {{ parent() }}
-  <script src="{{ asset('assets/js/custom/nick-test.js') }}"></script>
-{% endblock %}
 {% block content %}
   <div class="col-lg-8 box-form">
     <h2>Registrarse</h2>
@@ -727,3 +730,188 @@ Para mostrarlo lo ubicaremos dentro de la plantilla base **src\AppBundle\Resourc
 
 4.5.Método AJAX
 ---------------
+
+* Creamos el método `public function nickTestAction(Request $request){}`dentro de **src\AppBundle\Controller\UserController.php**.
+
+```php
+//  src\AppBundle\Controller\UserController.php
+/* MÉTODO PARA LA CONSULTA AJAX (¿EXISTE EL NICK DE REGISTRO?) ****************************/
+    public function nickTestAction(Request $request)
+    {
+        // Guardamos dentro de la variable $nick el dato que nos llega por POST
+        $nick = $request->get("nick");
+        // Busco dentro de la BD el dato
+        $em = $this->getDoctrine()->getManager();
+        $user_repo = $em->getRepository("BackendBundle:User");
+        $user_isset = $user_repo->findOneBy(array("nick"=>$nick));
+        $result = "used";
+        if(count($user_isset) >= 1 && is_object($user_isset)){
+            $result = "used";
+        }else{
+            $result = "unused";
+        }
+        // Para usar el método response es necesario cargar el componente
+        return new Response ($result);
+    }
+```
+
+* Añadimos el componente `use Symfony\Component\HttpFoundation\Response;` para habilitar el uso del método **response**.
+
+```php
+/* Añadimos los componentes que permitirán el uso de nuevas clases ************************/
+use Symfony\Component\HttpFoundation\Response; // Permite usar el método Response
+/******************************************************************************************/
+```
+
+* El routing dentro de **src/AppBundle/Resources/config/routing/user.yml**:
+
+```yml
+# ROUTING PARA CONSULTA AJAX (¿EXISTE EL NICK DE REGISTRO?)
+user_nick_test:
+    path: /nick-test
+    defaults: { _controller: AppBundle:User:nickTest }
+    methods: [POST]
+```
+
+* Creamos el archivo JavaScript dentro de **web/assets/js/custom/nick-test.js** que lanzará la consulta a la BD.
+
+```js
+// Escuchamos el documento y activamos la función
+$(document).ready(function(){
+/* Identificamos el elemento con esa clase  ".nick-input"
+y cuando salgamos de él (.blur) actuamos */
+  $(".nick-input").blur(function(){
+// Capturamos el valor
+    var nick = this.value;
+// Cargamos ajax
+    $.ajax({
+      url: URL+'/nick-test',
+      data: {nick: nick},
+      type: 'POST',
+      success: function(response){
+// Si 'response'=used
+        if(response =="used"){
+          $(".nick-input").css("border","1px solid red");
+// Si 'response'!=used
+        }else{
+          $(".nick-input").css("border","1px solid green");
+        }
+      }
+    });
+  });
+});
+```
+
+Para la Vista del sistema de Registro, usaremos la plantilla **src/AppBundle/Resources/views/User/register.html.twig**.
+
+```twig
+{# EXTRACTO DE CÓDIGO     #}
+{# src/AppBundle/Resources/views/User/register.html.twig #}
+{% extends "AppBundle:Layouts:layout.html.twig"%}
+{# FIN DE EXTRACTO        #}
+{# Ampliamos el bloque de JavaScript con el script 'nick-test.js'    #}
+{% block javascripts %}
+  {# la función parent() carga todo el contenido del bloque anterior #}
+  {{ parent() }}
+  <script src="{{ asset('assets/js/custom/nick-test.js') }}"></script>
+{% endblock %}
+```
+
+5.Login
+=======
+
+Definiremos el routing dentro de **src/AppBundle/Resources/config/routing/user.yml**:
+```yml
+# ROUTING PARA EL LOGIN
+login:
+    path: /login
+    defaults: { _controller: AppBundle:User:login }
+
+# ROUTING PARA EL CHEQUEAR EL LOGIN
+login_check:
+    path: /login_check
+
+# ROUTING PARA SALIR
+logout:
+    path: /logout
+```
+
+4.1.Controlador y Método de Login
+---------------------------------
+
+
+
+
+
+
+* Creamos el controlador **src\AppBundle\Controller\UserController.php** con la estructura básica siguiente:
+```php
+<?php
+namespace AppBundle\Controller;
+
+/* Componentes necesarios iniciales *******************************************************/
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+/******************************************************************************************/
+class UserController extends Controller
+{
+    public function indexAction(Request $request)
+    {
+        // indicamos la vista
+        return $this->render('AppBundle:User:index.html.twig');
+    }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6.Session
+=========
+
+Modifcamos **src/AppBundle/Controller/UserController.php** para añadir dentro el componente:
+```php
+// src\AppBundle\Controller\UserController.php
+/* Añadimos los componentes que permitirán el uso de nuevas clases ************************/
+use Symfony\Component\HttpFoundation\Session\Session; // Permite usar sesiones
+/******************************************************************************************/
+```
+
+y la variable `private $session;` junto al método `public function __construct(){}`.
+
+```php
+// src\AppBundle\Controller\UserController.php
+/* EXTRACTO DE CÓDIGO *********************************************************************/
+class UserController extends Controller
+{
+/* FIN DE EXTRACTO ************************************************************************/
+/* MÉTODO SESSION *************************************************************************/
+/*
+ * OBJETO SESSIÓN
+ * Para activar las sesiones inicializamos la variable e incluimos
+ * en ella el objeto Session()
+ * No olvidar dar acceso al componenete de Symfony
+ * Session() permitirá usar los mensajes FLASHBAG
+ */
+    private $session;
+    public function __construct(){
+      $this->session = new Session();
+    }
+/*******************************************************************/
+```
