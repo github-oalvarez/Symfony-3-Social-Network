@@ -687,7 +687,33 @@ class UserController extends Controller
     }
 ```
 
-4.3.Vista de Registro
+4.3.Sistema de Validación de Registro
+-------------------------------------
+
+```yml
+# src\AppBundle\Resources\config\validation.yml
+BackendBundle\Entity\User:
+    properties:
+        name:
+            - NotBlank: {message: "El nombre no puede estar vacío"}
+            - Type:
+                type: string
+                message: "El nambre tiene que ser cadena"ç
+            - Length:
+                min: 3
+                minMessage: "El titulo debe tener mas de dos caracteres"
+        surname:
+            - NotBlank: {message: "Los apellidos no pueden estar vacíos"}
+        nick:
+            - NotBlank: {message: "El nick no puede estar vacío"}
+        email:
+            - NotBlank: {message: "El email no puede estar vacío"}
+            - Email:
+                message: "El email {{ value }} no es válido".
+                checkMX: true
+```
+
+4.4.Vista de Registro
 ---------------------
 
 Para la Vista del sistema de Registro, usaremos la plantilla **src/AppBundle/Resources/views/User/register.html.twig**.
@@ -706,7 +732,7 @@ Para la Vista del sistema de Registro, usaremos la plantilla **src/AppBundle/Res
 {% endblock %}
 ```
 
-4.4.Mensajes FLASH
+4.5.Mensajes FLASH
 ------------------
 
 * Crearemos un mensaje que mostrar según cada una de las distintas situaciones que podremos encontrar, para incluirlo dentro de la variable `$status`
@@ -769,7 +795,7 @@ Para mostrarlo lo ubicaremos dentro de la plantilla base **src\AppBundle\Resourc
 {# FIN DE EXTRACTO        #}
 ```
 
-4.5.Método AJAX
+4.6.Método AJAX
 ---------------
 
 * Creamos el método `public function nickTestAction(Request $request){}`dentro de **src\AppBundle\Controller\UserController.php**.
@@ -900,8 +926,8 @@ public function loginAction(Request $request)
     }
 ```
 
-5.2.Vista de Registro
----------------------
+5.2.Vista de Login
+------------------
 
 Para la Vista del **sistema de Login**, usaremos la plantilla **src/AppBundle/Resources/views/User/login.html.twig**.
 
@@ -938,7 +964,7 @@ Para la Vista del **sistema de Login**, usaremos la plantilla **src/AppBundle/Re
 {% endblock %}
 ```
 
-5.3.Redirección Logueo
+5.4.Redirección Logueo
 ----------------------
 
 Para evitar el uso de la url **/register** y **/login**, colocaremos un redireccionamiento al principio de cada uno de estos métodos:
@@ -969,7 +995,7 @@ Para evitar el uso de la url **/register** y **/login**, colocaremos un redirecc
         /************************************************************/
 ```
 
-5.4.Ocultar Parte del Menú Según Logueo
+5.5.Ocultar Parte del Menú Según Logueo
 ---------------------------------------
 
 Para evitar la visualización dentro de menú de la opción de **login** y **registro** cuando se está logueado, y **Mi Perfil**, **Mis Datos**, **Salir** y **Ayuda** cuando no se está logueado, incluiremos esa parte de plantilla dentro del condicional siguiente:
@@ -1075,3 +1101,7 @@ Sustituimos la imagen predefinida `<img src="{{ asset ('assets/images/default.pn
          <img src="{{ asset ('uploads/users/'~app.user.image) }}" />
       {% endif %}
 ```
+
+7.Editar Usuario
+================
+
