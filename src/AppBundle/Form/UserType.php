@@ -23,6 +23,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+          // 'name' será el nombre de la columna de la base de datos
           ->add('name', TextType::class, array(
             'label'=>'Nombre',
             'required'=>'required',

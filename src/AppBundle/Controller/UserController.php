@@ -6,15 +6,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 /* Añadimos los componentes que permitirán el uso de nuevas clases ************************/
-use BackendBundle\Entity\User;                        // Da acceso a la Entidad Usuario
 use Symfony\Component\HttpFoundation\Session\Session; // Permite usar sesiones
-use Symfony\Component\HttpFoundation\Response; // Permite usar el método Response
+use Symfony\Component\HttpFoundation\Response;        // Permite usar el método Response
+use BackendBundle\Entity\User;                        // Da acceso a la Entidad Usuario
 use AppBundle\Form\RegisterType;                      // Da acceso al Formulario RegisterType
-use AppBundle\Form\UserType;                      // Da acceso al Formulario UserType
+use AppBundle\Form\UserType;                          // Da acceso al Formulario UserType
 /******************************************************************************************/
 class UserController extends Controller{
-/*
- * OBJETO SESSIÓN
+/* OBJETO SESSIÓN
  * Para activar las sesiones inicializamos la variable e incluimos
  * en ella el objeto Session()
  * No olvidar dar acceso al componenete de Symfony
@@ -24,8 +23,8 @@ class UserController extends Controller{
     public function __construct(){
       $this->session = new Session();
     }
-/*******************************************************************/
-/* MÉTODO PARA EL LOGIN */
+/********************************************************************/
+/* MÉTODO PARA EL LOGIN *********************************************/
     public function loginAction(Request $request)
     {
         /* si existe el objeto User nos rediriges a home            */
@@ -40,7 +39,7 @@ class UserController extends Controller{
             'lastUsername'=>$lastUsername,
             'error'=>$error ));
     }
-/* MÉTODO PARA EL REGISTRO DE USUARIO */
+/* MÉTODO PARA EL REGISTRO DE USUARIO *******************************/
     public function registerAction(Request $request)
     {
         /* si existe el objeto User nos rediriges a home            */
@@ -58,57 +57,53 @@ class UserController extends Controller{
         $form = $this->createForm(RegisterType::class, $user);
         $form->handleRequest($request);
         // Si se envía y es válido el formulario
-        if($form->isSubmitted()){
-            if($form->isValid()){
-                $em = $this->getDoctrine()->getManager();
-                // $user_repo = $em->getTepository("BackendBundle:User");
-                // hacemos la consulta
-                $query = $em->createQuery('SELECT u FROM BackendBundle:User u WHERE u.email = :email OR u.nick = :nick')
-                            ->setParameter('email', $form->get("email")->getData())
-                            ->setParameter('nick', $form->get("nick")->getData());
-                //extraemos el resultado de la $query
-                $user_isset = $query->getResult();
-                // Si no hay ningun usuario con ese email y nick
-                if(count($user_isset==0)){
-                    // si el usuario no existe
-                    $factory = $this->get("security.encoder_factory");
-                    $encoder = $factory->getEncoder($user);
-                    $password = $encoder->encodePassword(
-                        $form->get("password")->getData(),
-                        $user->getSalt()
-                      );
-                    // subimos los datos usando los setters
-                    $user->setPassword($password);
-                    $user->setRole("ROLE_USER");
-                    $user->setImage(null);
-                    // persistimos los datos dentro de Doctirne
-                    $em->persist($user);
-                    // guardamos los datos persistidos dentro de la BD
-                    $flush = $em->flush();
-                    // Si se guardan correctamente los datos en la BD
-                    if($flush == null){
-                        $status = "Te has registrado correctamente!";
-                        // generamos los mensajes FLASH (necesario activar las sesiones)
-                        $this->session->getFlashBag()->add("status", $status);
-                        return $this->redirect("login");
-                    }else{
-                        $status = "No te has registrado correctamente";
-                    }
+        if($form->isSubmitted() && $form->isValid()){
+            $em = $this->getDoctrine()->getManager();
+            // $user_repo = $em->getTepository("BackendBundle:User");
+            // hacemos la consulta
+            $query = $em->createQuery('SELECT u FROM BackendBundle:User u WHERE u.email = :email OR u.nick = :nick')
+                        ->setParameter('email', $form->get("email")->getData())
+                        ->setParameter('nick', $form->get("nick")->getData());
+            //extraemos el resultado de la $query
+            $user_isset = $query->getResult();
+            // Si no hay ningun usuario con ese email y nick
+            if(count($user_isset==0)){
+                // si el usuario no existe
+                $factory = $this->get("security.encoder_factory");
+                $encoder = $factory->getEncoder($user);
+                $password = $encoder->encodePassword(
+                    $form->get("password")->getData(),
+                    $user->getSalt()
+                  );
+                // subimos los datos usando los setters
+                $user->setPassword($password);
+                $user->setRole("ROLE_USER");
+                $user->setImage(null);
+                // persistimos los datos dentro de Doctirne
+                $em->persist($user);
+                // guardamos los datos persistidos dentro de la BD
+                $flush = $em->flush();
+                // Si se guardan correctamente los datos en la BD
+                if($flush == null){
+                    $status = "Te has registrado correctamente!";
                 }else{
-                  // si el usuario existe
-                  $status = "El usuario ya existe!!";
+                    $status = "No te has registrado correctamente";
                 }
             }else{
-                $status = "No te has registrado correctamente !!";
+                // si el usuario existe
+                $status = "El usuario ya existe!!";
             }
-            // generamos los mensajes FLASH (necesario activar las sesiones)
-            $this->session->getFlashBag()->add("status", $status);
+        }else{
+            $status = "No te has registrado correctamente !!";
         }
-        // generamos los mensajes FLASH
-
+        if($form->isSubmitted()){
+        // generamos los mensajes FLASH (necesario activar las sesiones)
+        $this->session->getFlashBag()->add("status", $status);
+        return $this->redirect("login");
+        }
         // enviamos la vista con el html del formulario ($form)
         return $this->render('AppBundle:User:register.html.twig', array(
-            "form"=>$form->createView()
+            'form'=>$form->createView()
         ));
     }
 
@@ -116,19 +111,19 @@ class UserController extends Controller{
     public function nickTestAction(Request $request)
     {
         // Guardamos dentro de la variable $nick el dato que nos llega por POST
-        $nick = $request->get("nick");
+        $nick = $request->get('nick');
         // Busco dentro de la BD el dato
         $em = $this->getDoctrine()->getManager();
-        $user_repo = $em->getRepository("BackendBundle:User");
-        $user_isset = $user_repo->findOneBy(array("nick"=>$nick));
-        $result = "used";
-        if(count($user_isset) >= 1 && is_object($user_isset)){
-            $result = "used";
-        }else{
-            $result = "unused";
-        }
+    		$user_repo = $em->getRepository('BackendBundle:User');
+    		$user_isset = $user_repo->findOneBy(array('nick' => $nick));
+        $result = 'used';
+    		if (count($user_isset) >= 1 && is_object($user_isset)) {
+    			$result = 'used';
+    		} else {
+    			$result = 'unused';
+    		}
         // Para usar el método response es necesario cargar el componente
-        return new Response ($result);
+        return new Response($result);
     }
 
 /* MÉTODO PARA CONFIGURAR EL PERFIL DE USUARIO */
@@ -227,7 +222,8 @@ class UserController extends Controller{
       }
       /************************************************************/
       $em = $this->getDoctrine()->getManager();
-      $search = $request->query->get("search", null);
+      // usamos 'trim' para limpiar los espacios por delante ypor detrás
+      $search = trim($request->query->get("search", null));
       if($search==null){
         return $this->redirect($this->generateURL('home_publications'));
       }

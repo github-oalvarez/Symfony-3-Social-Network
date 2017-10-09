@@ -1,32 +1,29 @@
+# ROUTING PARA SISTEMA DE LOGIN
 login:
     path: /login
     defaults: { _controller: AppBundle:User:login }
-
+# ROUTING PARA SISTEMA CHEQUEAR EL LOGUEO
 login_check:
     path: /login_check
-
+# ROUTING PARA SISTEMA DE LOGOUT
 logout:
     path: /logout
-
+# ROUTING PARA SISTEMA DE REGISTRO
 register:
     path: /register
     defaults: { _controller: AppBundle:User:register }
-
 # ROUTING PARA CONSULTA AJAX (¿EXISTE EL NICK DE REGISTRO?)
 user_nick_test:
     path: /nick-test
     defaults: { _controller: AppBundle:User:nickTest }
     methods: [POST]
-
 # ROUTING PARA CONFIGURACIÓN PERFIL DE Usuario
 user_edit:
     path: /my-data
     defaults: { _controller: AppBundle:User:editUser }
-
 user_list:
     path: /people
     defaults: { _controller: AppBundle:User:users }
-
 user_search:
     path: /search
     defaults: { _controller: AppBundle:User:search }

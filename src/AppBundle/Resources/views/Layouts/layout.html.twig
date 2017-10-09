@@ -9,9 +9,12 @@
       <link href="{{ asset ('assets/css/styles.css')}}" type="text/css" rel="stylesheet">
     {% endblock %}
     {% block javascripts %}
+    {# JavaScript para obtener la URL... #}
       <script type="text/javascript">
-        var URL="{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php"
+          //var URL = "{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php";
+          var URL = "{{ app.request.getSchemeAndHttpHost() }}";
       </script>
+    {# ....JavaScript para obtener la URL #}
       <script src="{{ asset ('assets/js/jquery.min.js')}}"></script>
       <script src="{{ asset ('assets/bootstrap/js/bootstrap.min.js')}}"></script>
       <!-- Permite usar el Scroll infinito de carga en un listado-->
@@ -29,7 +32,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{path("app_homepage")}}">
+            <a class="navbar-brand" href="{{path("home_publication")}}">
             <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
               NETWORK
             </a>

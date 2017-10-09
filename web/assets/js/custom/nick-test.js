@@ -6,13 +6,15 @@ y cuando salgamos de él (.blur) actuamos */
 // Capturamos el valor
     var nick = this.value;
 // Cargamos ajax
-    $.ajax({
-      url: URL+'/nick-test',
-      data: {nick: nick},
-      type: 'POST',
-      success: function(response){
+  $.ajax({
+    url: URL+'/nick-test',
+    data: {
+      nick: nick
+    },
+    type: 'POST',
+		success: function(response){
 // Si 'response'=used
-        if(response =="used"){
+        if(response == "used"){
           $(".nick-input").css("border","1px solid red");
 // Si 'response'!=used
         }else{

@@ -16,6 +16,7 @@
       <div class="box-content box-users">
         {% for user in pagination %}
           <div class="col-lg-12 user-item">
+            {# MOSTRAMOS EL AVATAR... #}
             <div class="avatar">
               {# Imagen de usuario si existe un registro o no de la imagen #}
               {% if user.image == null %}
@@ -24,10 +25,36 @@
                 <img src="{{ asset ('uploads/users/'~user.image) }}" />
               {% endif %}
             </div>
+            {# ...MOSTRAMOS EL AVATAR #}
             <div class="user-item-content">
               <p>{{ user.name }} {{ user.surname }} - {{ user.nick }} </p>
               <p>{{ user.bio }}
             </div>
+            {# Permitir seguir Usuarios... #}
+            {% if app.user.id != user.id %}
+              <div class="pull-right buttons-following">
+                <button class="btn btn-sm btn-success btn-follow
+                    {% if app.user|following(user) == true %}
+                      hidden
+                    {% endif %}
+                    "
+                    data-followed="{{user.id}}"
+                    >
+                  <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+                  Follow
+                </button>
+                <button class="btn btn-sm btn-default btn-unfollow
+                    {% if app.user|following(user) == false %}
+                      hidden
+                    {% endif %}
+                    "
+                    data-followed="{{user.id}}">
+                  <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                  Unfollow
+                </button>
+              </div>
+            {% endif %}
+            {# ... Permitir seguir Usuarios #}
             <div class="clearfix"></div>
             <hr/>
           </div>
