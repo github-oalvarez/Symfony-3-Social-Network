@@ -1,80 +1,119 @@
 {% extends "AppBundle:Layouts:layout.html.twig"%}
-{% block javascripts %}
-    {{parent()}}
-    <script type="text/javascript" src="{{ asset('assets/js/custom/home.js') }}"></script>
-{% endblock %}
+{# INCLUIMOS EL JAVASCRIPT QUE GESTIONA EL SCROLL INFINITO... #}
+  {% block javascripts %}
+      {{parent()}}
+      <script type="text/javascript" src="{{ asset('assets/js/custom/home.js') }}"></script>
+  {% endblock %}
+{# ...INCLUIMOS EL JAVASCRIPT QUE GESTIONA EL SCROLL INFINITO #}
 {% block content %}
+
 <div class="container">
   <div id="timeline" class="col-lg-7 box-default timeline pull-left">
     <h1 class="box-header">Timeline</h1>
-    <div class="box-contend">
+    <div class="box-content">
+
       {# LISTAMOS LAS PUBLICACIONES... #}
-      {% for publication in pagination %}
-        <div class="col-lg-12 publication-item">
-          {# MOSTRAMOS EL AVATAR... #}
-          <div class="avatar">
-            {# Imagen de usuario si existe un registro o no de la imagen #}
-            {% if publication.user.image == null %}
-              <img src="{{ asset ('assets/images/default.png') }}" />
-            {% else %}
-              <img src="{{ asset ('uploads/users/'~publication.user.image) }}" />
-            {% endif %}
-          </div>
-          {# ...MOSTRAMOS EL AVATAR #}
-          <div class="publication-item-content">
-            <p>
-              <a class="pub-name-link" href="#">
-                {{publication.user.name}} {{publication.user.surname}}
-              </a>
-              - {{publication.user.nick}} -
-              <span class="pub-date">
-              {# Formateamos la fecha mediante la siguiente función de TWIG #}
-              {# Crearemos una nueva extensión de TWIG src\AppBundle\Twig\LongTimeExtension.php #}
-              {# La registramos dentro de app\config\services.yml #}
-              {{publication.createdAt|long_time}}
-              </span>
-            </p>
-            {{publication.text}}
-            <div class="clearfix">
+        {% for publication in pagination %}
+          <div class="col-lg-12 publication-item">
+
+            {# MOSTRAMOS EL AVATAR... #}
+              <div class="avatar">
+                {# Imagen de usuario si existe un registro o no de la imagen #}
+                {% if publication.user.image == null %}
+                  <img src="{{ asset ('assets/images/default.png') }}" />
+                {% else %}
+                  <img src="{{ asset ('uploads/users/'~publication.user.image) }}" />
+                {% endif %}
+              </div>
+            {# ...MOSTRAMOS EL AVATAR #}
+
+            <div class="publication-item-content">
+              <p>
+                <a class="pub-name-link" href="#">
+                  {{publication.user.name}} {{publication.user.surname}}
+                </a>
+                - {{publication.user.nick}} -
+                <span class="pub-date">
+                {# Formateamos la fecha mediante la siguiente función de TWIG #}
+                {# Crearemos una nueva extensión de TWIG src\AppBundle\Twig\LongTimeExtension.php #}
+                {# La registramos dentro de app\config\services.yml #}
+                {{publication.createdAt|long_time}}
+                </span>
+              </p>
+
+              {# Permitir borrar publicación al editor... #}
+                <p>{{publication.text}}</p>
+                {% if(publication.user.id is defined) and (publication.user.id == app.user.id) %}
+                  <span data-id="{{publication.id}}" class="btn-delete-pub glyphicon glyphicon-trash" aria-hidden="true"></span>
+                {% endif %}
+              {# ...Permitir borrar publicación al editor #}
+
+              {# Permitir ver los documentos en otra ventana...#}
+                {% if (publication.document is defined) and (publication.document !=null) %}
+                  <a href="{{ asset('uploads/publications/documents/'~publication.document)}}"
+                    class="ntm-doc glyphicon glyphicon-save"
+                    aria-hidden="true"
+                    target="_blank">
+                  </a>
+                {% endif %}
+              {# ...Permitir ver los documentos en otra ventana #}
+
+              {# Permitir ver la imagen subida...#}
+                {% if (publication.image is defined) and (publication.image !=null) %}
+                  <span class="btn-img glyphicon glyphicon-picture" aria-hidden="true"></span>
+                  <div class"clearfix"></div>
+                  <div class="pub-image">
+                    <img src="{{asset('uploads/publications/images/'~publication.image)}}"/>
+                  </div>
+                {% endif %}
+              {# ...Permitir ver la imagen subida #}
+
+              <div class="clearfix">
+              </div>
+              <hr/>
             </div>
-            <hr/>
           </div>
-        </div>
-      {% endfor %}
-      {# display navigation #}
-      <div class ="navigation">
-        {{ knp_pagination_render(pagination) }}
-      </div>
+        {% endfor %}
+
+        {# PAGINAMOS LA APLICACIÓN... #}
+          <div class ="navigation">
+            {{ knp_pagination_render(pagination) }}
+          </div>
+        {# ...PAGINAMOS LA APLICACIÓN #}
       {# ...LISTAMOS LAS PUBLICACIONES #}
+
     </div>
   </div>
+
   {# BOX DATOS DE USUARIO... #}
-  <div id="user-card" class="col-lg-4 box-default pull-left">
-    <div class="avatar">
-      {# Imagen de usuario si existe un registro o no de la imagen #}
-      {% if app.user.image == null %}
-        <img src="{{ asset ('assets/images/default.png') }}" />
-      {% else %}
-        <img src="{{ asset ('uploads/users/'~app.user.image) }}" />
-      {% endif %}
-    </div>
-    <div class="name-surname">
-      <a href="#">{{app.user.name}} {{app.user.surname}}</a>
+    <div id="user-card" class="col-lg-4 box-default pull-left">
+      <div class="avatar">
+        {# Imagen de usuario si existe un registro o no de la imagen #}
+        {% if app.user.image == null %}
+          <img src="{{ asset ('assets/images/default.png') }}" />
+        {% else %}
+          <img src="{{ asset ('uploads/users/'~app.user.image) }}" />
+        {% endif %}
+      </div>
+      <div class="name-surname">
+        <a href="#">{{app.user.name}} {{app.user.surname}}</a>
+        <div class="clearfix"></div>
+        <span class="nickname">
+          {{app.user.nick}}
+        </span>
+      </div>
       <div class="clearfix"></div>
-      <span class="nickname">
-        {{app.user.nick}}
-      </span>
     </div>
-    <div class="clearfix"></div>
-  </div>
   {# ...BOX DATOS DE USUARIO #}
+
   {# BOX CREAR NUEVA PUBLICACIÓN... #}
-  <div id="new-publication" class="col-lg-4 pull-left box-default">
-    <h1 class="box-header">Crear publicación</h1>
-    <hr/>
-    {{form_start(form, {action:'', 'method':'POST'})}}
-    {{form_end(form)}}
-  </div>
+    <div id="new-publication" class="col-lg-4 pull-left box-default">
+      <h1 class="box-header">Crear publicación</h1>
+      <hr/>
+      {{form_start(form, {action:'', 'method':'POST'})}}
+      {{form_end(form)}}
+    </div>
   {# ...BOX CREAR NUEVA PUBLICACIÓN #}
+
 </div>
 {% endblock %}

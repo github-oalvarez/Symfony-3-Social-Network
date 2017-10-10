@@ -69,7 +69,7 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-# knp-paginator-bundle
+# KNP-PAGINATOR-BUNDLE
 # https://victorroblesweb.es/2016/02/27/paginacion-con-knppaginatorbundle-en-symfony3/
 knp_paginator:
     page_range: 5                       # rango por defecto de paginas en los controles del paginador

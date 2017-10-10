@@ -1,3 +1,4 @@
+# VALIDACIÓN ENTIDAD USER
 BackendBundle\Entity\User:
     properties:
         name:

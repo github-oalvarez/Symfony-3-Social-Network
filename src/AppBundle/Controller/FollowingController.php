@@ -1,28 +1,29 @@
 <?php
+// namespace BackendBundle\Form;
 
-namespace AppBundle\Controller;
-
+/* Cambiamos el namespace al cambiar el Bundle                     ************************/
+  namespace AppBundle\Controller;
+/******************************************************************************************/
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 /* Añadimos los componentes que permitirán el uso de nuevas clases ************************/
-use Symfony\Component\HttpFoundation\Session\Session; // Permite usar sesiones
-use Symfony\Component\HttpFoundation\Response;        // Permite usar el método Response
-use BackendBundle\Entity\Following;                   // Da acceso a la Entidad Following
-use BackendBundle\Entity\User;                        // Da acceso a la Entidad User
+  use Symfony\Component\HttpFoundation\Session\Session; // Permite usar sesiones
+  use Symfony\Component\HttpFoundation\Response;        // Permite usar el método Response
+  use BackendBundle\Entity\Following;                   // Da acceso a la Entidad Following
+  use BackendBundle\Entity\User;                        // Da acceso a la Entidad User
 /******************************************************************************************/
 class FollowingController extends Controller{
-/***
-   * OBJETO SESSIÓN
-   * Para activar las sesiones inicializamos la variable e incluimos
-   * en ella el objeto Session()
-   * No olvidar dar acceso al componenete de Symfony
-   * Session() permitirá usar los mensajes FLASHBAG
-   */
-   private $session;
-   public function __construct(){
+/* OBJETO SESSIÓN
+ * Para activar las sesiones inicializamos la variable e incluimos
+ * en ella el objeto Session()
+ * No olvidar dar acceso al componenete de Symfony
+ * Session() permitirá usar los mensajes FLASHBAG
+ */
+  private $session;
+  public function __construct(){
      $this->session = new Session();
-   }
+  }
 /********************************************************************/
 /* MÉTODO EJECUCIÓN AJAX PARA HACER FOLLOW ***************************/
   public function followAction(Request $request){
@@ -48,6 +49,8 @@ class FollowingController extends Controller{
      // para usar Response es necesario incluir el componente
      return new Response($status);
   }
+/********************************************************************/
+
 /* MÉTODO EJECUCIÓN AJAX PARA HACER UNFOLLOW *************************/
   public function unfollowAction(Request $request){
       // Capturamos los datos de nuestro usuario con el que estamos logueados
@@ -72,4 +75,6 @@ class FollowingController extends Controller{
      // para usar Response es necesario incluir el componente
      return new Response($status);
   }
+/********************************************************************/
+
 }

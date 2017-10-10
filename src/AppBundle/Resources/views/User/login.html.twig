@@ -21,9 +21,12 @@
         <label>Contraseña</label>
         <input type="password" id="password" name="_password" class="form-control" />
         <input type="submit" value="Entrar" class="btn btn-success" />
+
         {# Mediante el input Type="hidden" definimos el nombre del "target_path" al que nos
         queremos dirigir después de enviar el formulario #}
-        <input type="hidden" name="target_path" value="home" />
+          <input type="hidden" name="target_path" value="home" />
+        {% ... %}
+
     </form>
   </div>
 {% endblock %}

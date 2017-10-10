@@ -1,15 +1,16 @@
+# DIRECCIÓN ROUTING PARA HOME
 app_homepage:
     path: /
     defaults: { _controller: AppBundle:Default:index }
-
+# DIRECCIÓN ROUTING PARA USER
 app_user:
     resource: '@AppBundle/Resources/config/routing/user.yml'
     prefix:   /
-
+# DIRECCIÓN ROUTING PARA PUBLICATION
 app_publication:
     resource: '@AppBundle/Resources/config/routing/publication.yml'
     prefix:   /
-
+# DIRECCIÓN ROUTING PARA FOLLOWING
 app_following:
     resource: '@AppBundle/Resources/config/routing/following.yml'
     prefix:   /
