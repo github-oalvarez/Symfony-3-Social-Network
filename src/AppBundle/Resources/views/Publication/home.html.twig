@@ -133,10 +133,10 @@
       <div class="clearfix"></div>
       {# RESUMEN Y ESTADÍSTICAS ... #}
         {#
-         # Usaremos un nuevo filtro 'user_stat' ver extensión
+         # Usaremos un nuevo filtro 'user_stats' ver extensión
          # en '\src\Twig\UserStatsExtension.php' y '\app\config\services.yml'
          #}
-        {% set user_stats = app.user|users_stats %}
+        {% set user_stats = app.user|user_stats %}
         <div class="following-data">
           <a href="#">
             <span class="label-stat">Siguiendo</span>

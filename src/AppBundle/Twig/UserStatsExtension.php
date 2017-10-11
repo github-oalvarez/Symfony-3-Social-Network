@@ -23,7 +23,7 @@ class UserStatsExtension extends \Twig_Extension{
        * indicamos como llamaremos al filtro 'users_stats'
        * y que función ejecutará el filtro `userStatsFilter`
        */
-      new \Twig_SimpleFilter('users_stats', array($this, 'userStatsFilter'))
+      new \Twig_SimpleFilter('user_stats', array($this, 'userStatsFilter'))
     );
   }
   public function userStatsFilter($user){
