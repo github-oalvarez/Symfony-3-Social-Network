@@ -1,0 +1,8 @@
+# ROUTING PARA HOME PUBLICATION LIKE PUBLICACIÓN
+like_publication:
+    path: /like/{id}
+    defaults: { _controller: AppBundle:Like:like, id:null }
+# ROUTING PARA HOME PUBLICATION UNLIKE PUBLICACIÓN
+unlike_publication:
+    path: /unlike/{id}
+    defaults: { _controller: AppBundle:Like:unlike, id:null }

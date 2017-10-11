@@ -1,15 +1,25 @@
 <?php
-
+/*
+ * No olvidar incluir la extensión de TWIG dentro de 'app\config\services.yml'
+ */
 namespace AppBundle\Twig;
 
 class LongTimeExtension extends \Twig_Extension{
 // nombre del filtro será 'long_time'
   public function getFilters(){
     return array(
+      /*
+       * indicamos como llamaremos al filtro 'long_time'
+       * y que función ejecutará el filtro `LongTime`
+       */
       new \Twig_SimpleFilter('long_time', array($this, 'LongTimeFilter')),
     );
   }
-/* Incluyo el filtro que convierte la fecha a diferencia de tiempo con respecto el momento actual */
+  /* Función que hará de filtro */
+  /*
+   * Incluyo el filtro que convierte la fecha a diferencia de tiempo
+   * con respecto el momento actual
+   */
   public function LongTimeFilter($date) {
 		if ($date == null) {
 			return "Sin fecha";

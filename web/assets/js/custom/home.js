@@ -31,12 +31,18 @@ $(document).ready(function(){
     buttons();
   });
 });
+/*************************************************************/
+
 /* ...FUNCIÓN PARA LISTAR PUBLICACIONES SCROLL INFINITO */
 function buttons(){
-	$(".btn-img").unbind("click").click(function(){
+  /* Incluimos el código javascript que nos permita mostrar los mensajes en globos */
+	$('[data-toggle="tooltip"]').tooltip();
+
+  $(".btn-img").unbind("click").click(function(){
 		$(this).parent().find('.pub-image').fadeToggle();
 	});
-/* Damos funcionalidad al botón eliminar publicación */
+  /*************************************************************/
+  /* Damos funcionalidad al botón eliminar publicación */
   $(".btn-delete-pub").unbind('click').click(function(){
     // Ocultamos la publicación
     $(this).parent().parent().addClass('hidden');
@@ -44,10 +50,39 @@ function buttons(){
     $.ajax({
 			url: URL+'/publication/remove/'+$(this).attr("data-id"),
 			type: 'GET',
+			success: function(response){console.log(response);}
+		});
+	});
+  /*************************************************************/
+  /* Damos funcionalidad al botón LIKE publicación */
+  $(".btn-like").unbind('click').click(function(){
+    // Ocultamos una opción y mostramos la otra...
+		$(this).addClass("hidden");
+		$(this).parent().find('.btn-unlike').removeClass("hidden");
+    // ...Ocultamos una opción y mostramos la otra
+		$.ajax({
+			url: URL+'/like/'+$(this).attr("data-id"),
+			type: 'GET',
 			success: function(response){
 				console.log(response);
 			}
 		});
 	});
-
+  /*************************************************************/
+  /* Damos funcionalidad al botón UNLIKE publicación */
+  $(".btn-unlike").unbind('click').click(function(){
+    // Ocultamos una opción y mostramos la otra...
+    $(this).addClass("hidden");
+    $(this).parent().find('.btn-like').removeClass("hidden");
+    // ...Ocultamos una opción y mostramos la otra
+    $.ajax({
+      url: URL+'/unlike/'+$(this).attr("data-id"),
+      type: 'GET',
+      success: function(response){
+        console.log(response);
+      }
+    });
+  });
+  /*************************************************************/
 }
+/*************************************************************/

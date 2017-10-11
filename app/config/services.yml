@@ -1,12 +1,14 @@
 # Learn more about services, parameters and containers at
-# https://symfony.com/doc/current/service_container.html
+# http://symfony.com/doc/current/book/service_container.html
 parameters:
-    #parameter_name: value
+#    parameter_name: value
 
 services:
-    # default configuration for services in *this* file
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
 # EXTENSIÓN DE TWIG PARA EL SISTEMA DE FOLLOW AND UNFOLLOW...
-# nombre del filtro a usar: 'following.'
+    # nombre del filtro a usar: 'following.'
     following.twig_extension:
         class: AppBundle\Twig\FollowingExtension
         public: false
@@ -16,10 +18,30 @@ services:
             - { name: twig.extension }
 # ...EXTENSIÓN DE TWIG PARA EL SISTEMA DE FOLLOW AND UNFOLLOW
 # EXTENSIÓN DE TWIG PARA EL SISTEMA DE CUANTO TIEMPO HACE...
-# nombre del filtro a usar: 'long_time'
+    # nombre del filtro a usar: 'long_time'
     long_time.twig_extension:
         class: AppBundle\Twig\LongTimeExtension
         public: false
         tags:
             - { name: twig.extension }
 # ...EXTENSIÓN DE TWIG PARA EL SISTEMA DE CUANTO TIEMPO HACE
+# EXTENSIÓN DE TWIG PARA EL SISTEMA DE FOLLOW AND UNFOLLOW...
+    # nombre del filtro a usar: 'liked'
+    liked.twig_extension:
+        class: AppBundle\Twig\LikedExtension
+        public: false
+        arguments:
+            $doctrine: "@doctrine"
+        tags:
+            - { name: twig.extension }
+# ...EXTENSIÓN DE TWIG PARA EL SISTEMA DE FOLLOW AND UNFOLLOW
+# EXTENSIÓN DE TWIG PARA EL SISTEMA DE ESTADÍSTICAS DEL USUARIO...
+    # nombre del filtro a usar: 'users_stats'
+    users_stats.twig_extension:
+        class: AppBundle\Twig\UserStatsExtension
+        public: false
+        arguments:
+            $doctrine: "@doctrine"
+        tags:
+            - { name: twig.extension }
+# ...EXTENSIÓN DE TWIG PARA EL SISTEMA DE ESTADÍSTICAS DEL USUARIO

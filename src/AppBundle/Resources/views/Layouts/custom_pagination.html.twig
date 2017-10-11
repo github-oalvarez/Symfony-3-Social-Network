@@ -1,7 +1,7 @@
 {% if pageCount > 1 %}
     <ul class="pagination">
     
-{% Podemos cambiar la etiquetas de navegación aquí... #}
+{# Podemos cambiar la etiquetas de navegación aquí... #}
     {% if previous is defined %}
         <li>
             <a rel="prev_link" href="{{ path(route, query|merge({(pageParameterName): previous})) }}">&laquo;&nbsp;{{ 'label_previous'|trans({}, 'KnpPaginatorBundle') }}</a>
@@ -11,7 +11,7 @@
             <span>&laquo;&nbsp;{{ 'label_previous'|trans({}, 'KnpPaginatorBundle') }}</span>
         </li>
     {% endif %}
-{% ...Podemos cambiar la etiquetas de navegación aquí #}
+{# ...Podemos cambiar la etiquetas de navegación aquí #}
 
     {% if startPage > 1 %}
         <li>
@@ -58,7 +58,7 @@
         </li>
     {% endif %}
 
-{% Podemos cambiar la etiquetas de navegación aquí... #}
+{# Podemos cambiar la etiquetas de navegación aquí... #}
     {% if next is defined %}
         <li>
 
@@ -69,7 +69,7 @@
             <span>{{ 'label_next'|trans({}, 'KnpPaginatorBundle') }}&nbsp;&raquo;</span>
         </li>
     {% endif %}
-{% ...Podemos cambiar la etiquetas de navegación aquí #}
+{# ...Podemos cambiar la etiquetas de navegación aquí #}
 
     </ul>
 {% endif %}

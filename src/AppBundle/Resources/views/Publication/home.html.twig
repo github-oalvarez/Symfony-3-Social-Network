@@ -13,7 +13,7 @@
     <div class="box-content">
 
       {# LISTAMOS LAS PUBLICACIONES... #}
-        {% for publication in pagination %}
+      {% for publication in pagination %}
           <div class="col-lg-12 publication-item">
 
             {# MOSTRAMOS EL AVATAR... #}
@@ -29,9 +29,7 @@
 
             <div class="publication-item-content">
               <p>
-                <a class="pub-name-link" href="#">
-                  {{publication.user.name}} {{publication.user.surname}}
-                </a>
+                <a class="pub-name-link" href="#">{{publication.user.name}} {{publication.user.surname}}</a>
                 - {{publication.user.nick}} -
                 <span class="pub-date">
                 {# Formateamos la fecha mediante la siguiente función de TWIG #}
@@ -68,20 +66,50 @@
                 {% endif %}
               {# ...Permitir ver la imagen subida #}
 
-              <div class="clearfix">
-              </div>
-              <hr/>
+              {# Permitir dar ME GUSTA / NO ME GUSTA a la publicación... #}
+                <div class="pull-right like">
+                  {# Permitir dar ME GUSTA a la publicación... #}
+                    <span data-id="{{publication.id}}"
+                          class="
+                            {% if app.user|liked(publication) == true %}
+                            hidden
+                            {% endif %}  btn-like glyphicon glyphicon-heart-empty"
+                          aria-hidden="true"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Me gusta">
+                    </span>
+                  {# ...Permitir dar ME GUSTA a la publicación #}
+                  {# Permitir dar NO ME GUSTA a la publicación... #}
+                    {#
+                     # Usaremos un nuevo filtro 'Liked' ver extensión
+                     # en '\src\Twig\LikedExtensio.php' y '\app\config\services.yml'
+                     #}
+                    <span data-id="{{publication.id}}"
+                    class="
+                            {% if app.user|liked(publication) == false %}
+                            hidden
+                            {% endif %}
+                            btn-unlike active glyphicon glyphicon-heart-empty"
+                          aria-hidden="true"
+                          data-toggle="tooltip"
+                          data-placement="bottom"
+                          title="Ya no me gusta">
+                    </span>
+                  {# ...Permitir dar NO ME GUSTA a la publicación #}
+                </div>
+              {# Permitir dar ME GUSTA / NO ME GUSTA a la publicación... #}
             </div>
-          </div>
-        {% endfor %}
-
-        {# PAGINAMOS LA APLICACIÓN... #}
-          <div class ="navigation">
-            {{ knp_pagination_render(pagination) }}
-          </div>
-        {# ...PAGINAMOS LA APLICACIÓN #}
+          <div class="clearfix"></div>
+          <hr/>
+        </div>
+      {% endfor %}
       {# ...LISTAMOS LAS PUBLICACIONES #}
-
+      {# PAGINAMOS LA APLICACIÓN... #}
+        <div class ="navigation">
+          {{ knp_pagination_render(pagination) }}
+        </div>
+      {# ...PAGINAMOS LA APLICACIÓN #}
     </div>
   </div>
 
@@ -103,6 +131,37 @@
         </span>
       </div>
       <div class="clearfix"></div>
+      {# RESUMEN Y ESTADÍSTICAS ... #}
+        {#
+         # Usaremos un nuevo filtro 'user_stat' ver extensión
+         # en '\src\Twig\UserStatsExtension.php' y '\app\config\services.yml'
+         #}
+        {% set user_stats = app.user|users_stats %}
+        <div class="following-data">
+          <a href="#">
+            <span class="label-stat">Siguiendo</span>
+            <span class="number-stat">{{user_stats.following}}</span>
+          </a>
+        </div>
+        <div class="following-data">
+          <a href="#">
+            <span class="label-stat">Seguidores</span>
+            <span class="number-stat">{{user_stats.followers}}</span>
+          </a>
+        </div>
+        <div class="following-data">
+          <a href="#">
+            <span class="label-stat">Publicaciones</span>
+            <span class="number-stat">{{user_stats.publications}}</span>
+          </a>
+        </div>
+        <div class="following-data">
+          <a href="#">
+            <span class="label-stat">Me gustas</span>
+            <span class="number-stat">{{user_stats.likes}}</span>
+          </a>
+        </div>
+      {# RESUMEN Y ESTADÍSTICAS ... #}
     </div>
   {# ...BOX DATOS DE USUARIO #}
 
