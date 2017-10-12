@@ -8,3 +8,11 @@ following_unfollow:
     path: /unfollow
     defaults: { _controller: AppBundle:Following:unfollow }
     methods: [POST]
+# ROUTING PARA HOME PUBLICATION MUESTRA USUARIOS QUE SIGUE EL USUARIO
+following_users:
+    path: /following/{nickname}
+    defaults: { _controller: AppBundle:Following:following, nickname:null }
+# ROUTING PARA HOME PUBLICATION MUESTRA USUARIOS QUE SIGUEN AL USUARIO
+followed_users:
+    path: /followed/{nickname}
+    defaults: { _controller: AppBundle:Following:followed, nickname:null }

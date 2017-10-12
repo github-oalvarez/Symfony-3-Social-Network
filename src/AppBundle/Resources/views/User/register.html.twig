@@ -1,11 +1,13 @@
-{% extends "AppBundle:Layouts:layout.html.twig"%}
-
-{% block javascripts %}
-  {# la función parent() carga todo el contenido del bloque anterior #}
-    {{ parent() }}
-    <script src="{{ asset('assets/js/custom/nick-test.js') }}"></script>
-{% endblock %}
-
+{# EXTENDEMOS LA PLANTILLA 'AppBundle:Layouts:layout.html.twig'...................... #}
+  {% extends "AppBundle:Layouts:layout.html.twig"%}
+{# ......................EXTENDEMOS LA PLANTILLA 'AppBundle:Layouts:layout.html.twig' #}
+{# INCLUIMOS EL JAVASCRIPT QUE VERIFICA SI EL NICK EXISTE............................ #}
+  {% block javascripts %}
+    {# la función parent() carga todo el contenido del bloque anterior #}
+      {{ parent() }}
+      <script src="{{ asset('assets/js/custom/nick-test.js') }}"></script>
+  {% endblock %}
+{# ............................INCLUIMOS EL JAVASCRIPT QUE VERIFICA SI EL NICK EXISTE #}
 {% block content %}
   <div class="col-lg-8 box-form">
     <h2>Registrarse</h2>

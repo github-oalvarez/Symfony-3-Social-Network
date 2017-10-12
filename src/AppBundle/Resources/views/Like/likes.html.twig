@@ -4,87 +4,39 @@
 {# INCLUIMOS EL JAVASCRIPT QUE GESTIONA EL SCROLL INFINITO........................... #}
   {% block javascripts %}
       {{parent()}}
-      <script type="text/javascript" src="{{ asset('assets/js/custom/profile.js') }}"></script>
+      <script type="text/javascript" src="{{ asset('assets/js/custom/home.js') }}"></script>
   {% endblock %}
 {# ...........................INCLUIMOS EL JAVASCRIPT QUE GESTIONA EL SCROLL INFINITO #}
 {% block content %}
-  <div class="col-lg-10 box-default profile-box">
-    {# MOSTRAMOS EL AVATAR........................................................... #}
-      <div class="avatar">
-        {# IMAGEN DE USUARIO SI EXISTE O NO UN REGISTRO DE IMAGEN.................. #}
-          {% if user.image == null %}
-              <img src="{{ asset ('assets/images/default.png') }}" />
-          {% else %}
-              <img src="{{ asset ('uploads/users/'~user.image) }}" />
-          {% endif %}
-        {# ..................IMAGEN DE USUARIO SI EXISTE O NO UN REGISTRO DE IMAGEN #}
-      </div>
-    {# ...........................................................MOSTRAMOS EL AVATAR #}
-    {# MOSTRAMOS Nombre y NICK....................................................... #}
-      <div class="name-surname">
-        <h2>{{user.name}} {{user.surname}}</h2>
-        <div class="clearfix"></div>
-        <span class="nickname">
-          {{user.nick}}
-        </span>
-      </div>
-    {# .......................................................MOSTRAMOS Nombre y NICK #}
-    {# MOSTRAMOS LA BIOGRAFIA........................................................ #}
-      <div class="bio">
-        {{user.bio}}
-      </div>
-    {# ........................................................MOSTRAMOS LA BIOGRAFIA #}
-    <div class="clearfix"></div>
-    {# MOSTRAMOS LAS ESTADISTICAS DEL PERFIL......................................... #}
-      <div id="user_stats">
-        {# RESUMEN Y ESTADÍSTICAS ................................................... #}
-          {#
-           # Usaremos un nuevo filtro 'users_stats' ver extensión
-           # en '\src\Twig\UserStatsExtension.php' y '\app\config\services.yml'
-           #}
-          {% set user_stats = user|user_stats %}
-          <div class="following-data">
-            <a href="{{path('following_users',{'nickname':user.nick})}}">
-              <span class="label-stat">Siguiendo</span>
-              <span class="number-stat">{{user_stats.following}}</span>
-            </a>
-          </div>
-          <div class="following-data">
-            <a href="{{path('followed_users',{'nickname':user.nick})}}">
-              <span class="label-stat">Seguidores</span>
-              <span class="number-stat">{{user_stats.followers}}</span>
-            </a>
-          </div>
-          <div class="following-data">
-            <a href="{{path('user_profile',{'nickname':user.nick})}}">
-              <span class="label-stat">Publicaciones</span>
-              <span class="number-stat">{{user_stats.publications}}</span>
-            </a>
-          </div>
-          <div class="following-data">
-            <a href="{{path('user_likes',{'nickname':user.nick})}}">
-              <span class="label-stat">Me gustas</span>
-              <span class="number-stat">{{user_stats.likes}}</span>
-            </a>
-          </div>
-        {# RESUMEN Y ESTADÍSTICAS .................................................. #}
-        <div class="clearfix"></div>
-      </div>
-    {# .........................................MOSTRAMOS LAS ESTADISTICAS DEL PERFIL #}
-    {# MOSTRAMOS LAS PUBLICACIONES................................................... #}
-      <div id="user-publications">
-        {# LISTAMOS LAS PUBLICACIONES.................................................. #}
-          {% for publication in pagination %}
-              <div class="col-lg-12 publication-item">
+  <div class="container">
+    <div id="timeline" class="col-lg-12 box-default timeline pull-left">
+      <h1 class="box-header">Publicaciones que le gustan a {{user.nick}}</h1>
+      {# INCLUIMOS EL TOTAL DE PUBLICACIONES......................................... #}
+        <div class="count">
+          <span class="label label-primary">
+            Total de publicaciones: {{pagination.getTotalItemCount}}
+          </span>
+        </div>
+        <hr/>
+      {# .........................................INCLUIMOS EL TOTAL DE PUBLICACIONES #}
+      <div class="box-content">
+        {# LISTAMOS LAS PUBLICACIONES................................................ #}
+          {% for like in pagination %}
+            {#
+             # Incluimos una nueva variable publication que contendrá a like.publication
+             # para simplificar la programación
+            #}
+            {% set publication = like.publication %}
+            {# ....................................................................... #}
+            <div class="col-lg-12 publication-item">
                 {# MOSTRAMOS EL AVATAR................................................. #}
                   <div class="avatar">
-                    {# IMAGEN DE USUARIO SI EXISTE O NO UN REGISTRO DE IMAGEN.......... #}
-                      {% if publication.user.image == null %}
-                        <img src="{{ asset ('assets/images/default.png') }}" />
-                      {% else %}
-                        <img src="{{ asset ('uploads/users/'~publication.user.image) }}" />
-                      {% endif %}
-                    {# ..........IMAGEN DE USUARIO SI EXISTE O NO UN REGISTRO DE IMAGEN #}
+                    {# Imagen de usuario si existe un registro o no de la imagen #}
+                    {% if publication.user.image == null %}
+                      <img src="{{ asset ('assets/images/default.png') }}" />
+                    {% else %}
+                      <img src="{{ asset ('uploads/users/'~publication.user.image) }}" />
+                    {% endif %}
                   </div>
                 {# .................................................MOSTRAMOS EL AVATAR #}
                 <div class="publication-item-content">
@@ -101,9 +53,7 @@
                   {# PERMITIR BORRAR PUBLICACIÓN AL EDITOR............................. #}
                     <p>{{publication.text}}</p>
                     {% if(publication.user.id is defined) and (publication.user.id == app.user.id) %}
-                      <span data-id="{{publication.id}}"
-                        class="btn-delete-pub glyphicon glyphicon-trash" aria-hidden="true">
-                      </span>
+                      <span data-id="{{publication.id}}" class="btn-delete-pub glyphicon glyphicon-trash" aria-hidden="true"></span>
                     {% endif %}
                   {# .............................PERMITIR BORRAR PUBLICACIÓN AL EDITOR #}
                   {# PERMITIR VER LOS DOCUMENTOS EN OTRA VENTANA....................... #}
@@ -162,14 +112,13 @@
               <hr/>
             </div>
           {% endfor %}
-        {# ..................................................LISTAMOS LAS PUBLICACIONES #}
-        {# PAGINAMOS LA APLICACIÓN..................................................... #}
+        {# ................................................LISTAMOS LAS PUBLICACIONES #}
+        {# PAGINAMOS LA APLICACIÓN................................................... #}
           <div class ="navigation">
             {{ knp_pagination_render(pagination) }}
           </div>
-        {# .....................................................PAGINAMOS LA APLICACIÓN #}
-        <div class="clearfix"></div>
+        {# ...................................................PAGINAMOS LA APLICACIÓN #}
       </div>
-    {# ...................................................MOSTRAMOS LAS PUBLICACIONES #}
+    </div>
   </div>
 {% endblock %}

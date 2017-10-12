@@ -45,3 +45,8 @@ services:
         tags:
             - { name: twig.extension }
 # ...EXTENSIÓN DE TWIG PARA EL SISTEMA DE ESTADÍSTICAS DEL USUARIO
+# EXTENSIÓN SERVICIO DE NOTIFICACIONES...
+    app.notification_service:
+        class: AppBundle\Services\NotificationService
+        arguments: ["@doctrine.orm.entity_manager"]
+# ...EXTENSIÓN SERVICIO DE NOTIFICACIONES

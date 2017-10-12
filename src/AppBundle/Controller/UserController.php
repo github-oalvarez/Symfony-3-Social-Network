@@ -254,28 +254,42 @@ class UserController extends Controller{
 
   /* MÉTODO PARA MOSTRAR EL PERFIL DE USUARIO */
   public function profileAction(Request $request, $nickname = null){
+    // Cargo Entity Manager de Doctrine dentro de lavariable $em
     $em = $this->getDoctrine()->getManager();
-
+    /*
+     * Si $nickname es distinto de 'null' lo busco en la BD,
+     * si es null coloco el del usuario logueado
+     */
 		if ($nickname != null) {
+      // Cargo la entidad User dentro de $user_repo
 			$user_repo = $em->getRepository("BackendBundle:User");
+      // Busco el registro por su nick que será igual a $nickname
 			$user = $user_repo->findOneBy(array("nick" => $nickname));
 		} else {
 			$user = $this->getUser();
 		}
-    // Si el usuario que llega por la url está vacio o no es objeto
-    /* si existe el objeto User nos rediriges a home            */
+    /*
+     * Si el usuario que llega por la url está vacio o no es objeto
+     * si existe el objeto User nos rediriges a home
+     */
     if (empty($user) || !is_object($user)) {
 			return $this->redirect($this->generateUrl('home_publications'));
 		}
     /************************************************************/
+    // Busco el $id del usuario señalado
     $user_id = $user->getId();
+    // Realizo la consulta
 		$dql = "SELECT p FROM BackendBundle:Publication p WHERE p.user = $user_id ORDER BY p.id DESC";
+    // Cargo la Query de la consulta $dql
 		$query = $em->createQuery($dql);
-    // Iniciamos el paginador
+    /*
+     * Iniciamos el paginador
+     */
     $paginator = $this->get('knp_paginator');
 		$publications = $paginator->paginate(
 				$query, $request->query->getInt('page', 1), 5
 		);
+    /************************************************************/
     // Devolvemos la vista con la información generado por el paginador
     return $this->render('AppBundle:User:profile.html.twig', array(
 			'user' => $user,

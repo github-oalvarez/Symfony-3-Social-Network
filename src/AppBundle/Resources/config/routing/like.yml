@@ -6,3 +6,7 @@ like_publication:
 unlike_publication:
     path: /unlike/{id}
     defaults: { _controller: AppBundle:Like:unlike, id:null }
+# ROUTING PARA PERFIL DE USUARIO LIKES
+user_likes:
+    path: /likes/{nickname}
+    defaults: { _controller: AppBundle:Like:likes, id:null }

@@ -3,26 +3,25 @@
   <head>
     <meta charset="utf-8"/>
     <title>{% block title %} SF3 NETWORK {% endblock %}</title>
-
     {% block stylesheets %}
       <link href="{{ asset ('assets/bootstrap/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet">
       <link href="{{ asset ('assets/css/bootstrap.cosmo.min.css')}}" type="text/css" rel="stylesheet">
       <link href="{{ asset ('assets/css/styles.css')}}" type="text/css" rel="stylesheet">
     {% endblock %}
-
     {% block javascripts %}
-    {# JavaScript para obtener la URL... #}
-      <script type="text/javascript">
-          //var URL = "{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php";
-          var URL = "{{ app.request.getSchemeAndHttpHost() }}";
-      </script>
-    {# ....JavaScript para obtener la URL #}
+      {# ............................PODEMOS CAMBIAR LAS ETIQUETAS DE NAVEGACIÓN AQUÍ #}
+      {# JAVASCRIPT PARA OBTENER LA URL.............................................. #}
+        <script type="text/javascript">
+            //var URL = "{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php";
+            var URL = "{{ app.request.getSchemeAndHttpHost() }}";
+        </script>
+      {# ..............................................JAVASCRIPT PARA OBTENER LA URL #}
       <script src="{{ asset ('assets/js/jquery.min.js')}}"></script>
       <script src="{{ asset ('assets/bootstrap/js/bootstrap.min.js')}}"></script>
-      <!-- Permite usar el Scroll infinito de carga en un listado-->
-      <script src="{{ asset ('assets/js/jquery-ias.min.js')}}"></script>
+      {# SCRIPT QUE PERMITE USAR EL SCROLL INFINITO DE CARGA DE UN LISTADO........... #}
+        <script src="{{ asset ('assets/js/jquery-ias.min.js')}}"></script>
+      {# ...........SCRIPT QUE PERMITE USAR EL SCROLL INFINITO DE CARGA DE UN LISTADO #}
     {% endblock %}
-
   </head>
   <body>
     <header>
@@ -42,9 +41,9 @@
           </div>
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-
-              {# Evitamos que se vea esta parte del menú cuando NO estamos logueados... #}
+              {# EVITAMOS QUE SE VEA ESTA PARTE DEL MENÚ CUANDO NO ESTAMOS LOGUEADOS. #}
                 {% if app.user == null %}
+                  {# PARTE NO VISIBLE LOGUEADO....................................... #}
                   <li>
                     <a href="{{path("login")}}">
                       <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
@@ -59,6 +58,7 @@
                       Registro
                     </a>
                   </li>
+                  {# .......................................PARTE NO VISIBLE LOGUEADO #}
                 {% else %}
                   <li>
                     <a href="{{path("app_homepage")}}">
@@ -74,7 +74,7 @@
                       Gente
                     </a>
                   </li>
-                  {# BUSCADOR DE USUARIOS... #}
+                  {# BUSCADOR DE USUARIOS........................................... #}
                     <li>
                       <form action="{{ path('user_search') }}" class="navbar-form navbar-left">
                         <div class="form-group">
@@ -85,26 +85,37 @@
                         </button>
                       </form>
                     </li>
-                  {# ...BUSCADOR DE USUARIOS #}
+                  {# ............................................BUSCADOR DE USUARIOS #}
                 {% endif %}
-              {# ...Evitamos que se vea esta parte del menú cuando NO estamos logueados #}
-
+              {# .EVITAMOS QUE SE VEA ESTA PARTE DEL MENÚ CUANDO NO ESTAMOS LOGUEADOS #}
             </ul>
-            {# Evitamos que se vea esta parte del menú cuando estamos logueados... #}
+            {# EVITAMOS QUE SE VEA ESTA PARTE DEL MENÚ CUANDO ESTAMOS LOGUEADOS...... #}
               {% if app.user != null %}
                 <ul class="nav navbar-nav navbar-right">
+                  <li>
+                    <a href="{{path("user_edit")}}">
+                      <span class="glyphicon glyphicon-envelope" aria-hidden="true">
+                      </span>
+                      &nbsp;Mensajes Privados
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{path("user_edit")}}">
+                      <span class="glyphicon glyphicon-bell" aria-hidden="true">
+                      </span>
+                      &nbsp;Notificaciones
+                    </a>
+                  </li>
                   <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                       <div class="avatar">
-
-                        {# Imagen de usuario si existe un registro o no de la imagen... #}
+                        {# IMAGEN DE USUARIO SI EXISTIESE O NO UN REGISTRO........... #}
                           {% if app.user.image == null %}
                             <img src="{{ asset ('assets/images/default.png') }}" />
                           {% else %}
                             <img src="{{ asset ('uploads/users/'~app.user.image) }}" />
                           {% endif %}
-                        {# ...Imagen de usuario si existe un registro o no de la imagen #}
-
+                        {# ...........IMAGEN DE USUARIO SI EXISTIESE O NO UN REGISTRO #}
                       </div>
                       {{app.user.name}} {{app.user.surname}}
                       <span class="caret"></span>
@@ -130,15 +141,13 @@
                   </li>
                 </ul>
               {% endif %}
-            {# ...Evitamos que se vea esta parte del menú cuando estamos logueados #}
-
+            {# ......EVITAMOS QUE SE VEA ESTA PARTE DEL MENÚ CUANDO ESTAMOS LOGUEADOS #}
           </div>
         </div>
       </nav>
     </header>
     <section id="content">
-
-      {# Mostramos los FLASHBAG #}
+      {# MOSTRAMOS LOS FLASHBAG...................................................... #}
         <div class="container">
           <div class="col-lg-11">
             {% for message in app.session.flashbag().get('status') %}
@@ -147,8 +156,7 @@
           </div>
         </div>
         <div class="clearfix"></div>
-      {# Mostramos los FLASHBAG #}
-
+      {# ......................................................MOSTRAMOS LOS FLASHBAG #}
       {% block content %}{% endblock%}
     </section>
     <footer class="col-lg-12">

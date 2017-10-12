@@ -1,10 +1,13 @@
-{% extends "AppBundle:Layouts:layout.html.twig"%}
+{# EXTENDEMOS LA PLANTILLA 'AppBundle:Layouts:layout.html.twig'...................... #}
+  {% extends "AppBundle:Layouts:layout.html.twig"%}
+{# ......................EXTENDEMOS LA PLANTILLA 'AppBundle:Layouts:layout.html.twig' #}
 {% block content %}
   <div class="col-lg-8 box-form">
     <h2>Mis Datos</h2>
     <hr/>
-    {# indicamos al formulario que vamos a enviar fichero #}
-    {{form_start(form, {'enctype':'multipart/form-data'})}}
-    {{form_end(form)}}
+    {# INDICAMOS AL FORMULARIO QUE VAMOS A ENVIAR FICHERO............................ #}
+      {{form_start(form, {'enctype':'multipart/form-data'})}}
+      {{form_end(form)}}
+    {# INDICAMOS AL FORMULARIO QUE VAMOS A ENVIAR FICHERO............................ #}
   </div>
 {% endblock %}

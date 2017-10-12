@@ -24,7 +24,7 @@ class FollowingController extends Controller{
   public function __construct(){
      $this->session = new Session();
   }
-/********************************************************************/
+/*********************************************************************/
 /* MÉTODO EJECUCIÓN AJAX PARA HACER FOLLOW ***************************/
   public function followAction(Request $request){
       // Capturamos los datos de nuestro usuario con el que estamos logueados
@@ -42,14 +42,22 @@ class FollowingController extends Controller{
      $em->persist($following);// Persistimos la query
      $flush = $em->flush();// Incluimos los datos en la BD
      if($flush == null){
-        $status = "Ahora estás siguiendo a este usuario!!";
+       /* Sistema de notificaciones....................................*/
+       $notification = $this->get('app.notification_service');
+       $notification->set(
+         $followed,
+         'follow',
+         $user->getId()
+       );
+       /****************************************************************/
+       $status = "Ahora estás siguiendo a este usuario!!";
      }else{
-        $status = "No se ha podido seguir a este usuario";
+       $status = "No se ha podido seguir a este usuario";
      }
      // para usar Response es necesario incluir el componente
      return new Response($status);
   }
-/********************************************************************/
+/*********************************************************************/
 
 /* MÉTODO EJECUCIÓN AJAX PARA HACER UNFOLLOW *************************/
   public function unfollowAction(Request $request){
@@ -75,6 +83,102 @@ class FollowingController extends Controller{
      // para usar Response es necesario incluir el componente
      return new Response($status);
   }
+/*********************************************************************/
+
+/* MÉTODO PARA MOSTRAR LOS PERFILES QUE SIGUE UN PERFIL  *************/
+  public function followingAction(Request $request, $nickname = null){
+    // Cargo Entity Manager de Doctrine dentro de lavariable $em
+    $em = $this->getDoctrine()->getManager();
+    /*
+     * Si $nickname es distinto de 'null' lo busco en la BD,
+     * si es null coloco el del usuario logueado
+     */
+    if ($nickname != null) {
+      // Cargo la entidad User dentro de $user_repo
+      $user_repo = $em->getRepository("BackendBundle:User");
+      // Busco el registro por su nick que será igual a $nickname
+      $user = $user_repo->findOneBy(array("nick" => $nickname));
+    } else {
+      // Cargo el usuario logueado
+      $user = $this->getUser();
+    }
+    /*
+     * Si el usuario que llega por la url está vacio o no es objeto
+     * si existe el objeto User nos rediriges a home
+     */
+    if (empty($user) || !is_object($user)) {
+      return $this->redirect($this->generateUrl('home_publications'));
+    }
+    /******************************************************************/
+    // Busco el $id del usuario señalado
+    $user_id = $user->getId();
+    // Realizo la consulta
+    $dql = "SELECT f FROM BackendBundle:Following f WHERE f.user = $user_id ORDER BY f.id DESC";
+    // Cargo la Query de la consulta $dql
+    $query = $em->createQuery($dql);
+    /*
+     * Iniciamos el paginador
+     */
+    $paginator = $this->get('knp_paginator');
+    $following = $paginator->paginate(
+        $query, $request->query->getInt('page', 1), 5
+    );
+    /*****************************************************************/
+    // Devolvemos la vista con la información generado por el paginador
+    return $this->render('AppBundle:Following:following.html.twig', array(
+      'type'=>'following',
+      'profile_user' => $user,
+      'pagination' => $following
+    ));
+	}
+/*********************************************************************/
+
+/* MÉTODO PARA MOSTRAR LOS SEGUIDORES DE UN PERFIL  ******************/
+  public function followedAction(Request $request, $nickname = null){
+    // Cargo Entity Manager de Doctrine dentro de lavariable $em
+    $em = $this->getDoctrine()->getManager();
+    /*
+     * Si $nickname es distinto de 'null' lo busco en la BD,
+     * si es null coloco el del usuario logueado
+     */
+    if ($nickname != null) {
+      // Cargo la entidad User dentro de $user_repo
+      $user_repo = $em->getRepository("BackendBundle:User");
+      // Busco el registro por su nick que será igual a $nickname
+      $user = $user_repo->findOneBy(array("nick" => $nickname));
+    } else {
+      // Cargo el usuario logueado
+      $user = $this->getUser();
+    }
+    /*
+     * Si el usuario que llega por la url está vacio o no es objeto
+     * si existe el objeto User nos rediriges a home
+     */
+    if (empty($user) || !is_object($user)) {
+      return $this->redirect($this->generateUrl('home_publications'));
+    }
+    /************************************************************/
+    // Busco el $id del usuario señalado
+    $user_id = $user->getId();
+    // Realizo la consulta
+    $dql = "SELECT f FROM BackendBundle:Following f WHERE f.followed = $user_id ORDER BY f.id DESC";
+    // Cargo la Query de la consulta $dql
+    $query = $em->createQuery($dql);
+    /*
+     * Iniciamos el paginador
+     */
+    $paginator = $this->get('knp_paginator');
+    $followed = $paginator->paginate(
+        $query, $request->query->getInt('page', 1), 5
+    );
+    /************************************************************/
+    // Devolvemos la vista con la información generado por el paginador
+    return $this->render('AppBundle:Following:following.html.twig', array(
+      'type'=>'followed',
+      'profile_user' => $user,
+      'pagination' => $followed
+    ));
+	}
 /********************************************************************/
 
 }

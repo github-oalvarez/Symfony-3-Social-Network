@@ -1,4 +1,6 @@
-{% extends "AppBundle:Layouts:layout.html.twig"%}
+{# EXTENDEMOS LA PLANTILLA 'AppBundle:Layouts:layout.html.twig'...................... #}
+  {% extends "AppBundle:Layouts:layout.html.twig"%}
+{# ......................EXTENDEMOS LA PLANTILLA 'AppBundle:Layouts:layout.html.twig' #}
 {% block content %}
   <div class="col-lg-4 box-form">
     <h2>Identificarse</h2>
@@ -9,7 +11,6 @@
     {% if last_username is defined %}
         {{ last_username }}
     {% endif %}
-
     <form action="{{path('login_check')}}" method="POST">
         <label>Email</label>
         <input type="email" id="username" name="_username"
@@ -21,12 +22,10 @@
         <label>Contraseña</label>
         <input type="password" id="password" name="_password" class="form-control" />
         <input type="submit" value="Entrar" class="btn btn-success" />
-
         {# Mediante el input Type="hidden" definimos el nombre del "target_path" al que nos
         queremos dirigir después de enviar el formulario #}
           <input type="hidden" name="target_path" value="home" />
-        {# ... #}
-
+        {# ............................................................................. #}
     </form>
   </div>
 {% endblock %}

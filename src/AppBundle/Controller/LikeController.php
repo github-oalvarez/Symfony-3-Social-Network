@@ -17,13 +17,15 @@ use Symfony\Component\HttpFoundation\Request;
 /******************************************************************************************/
 class LikeController extends Controller
 {
-/* MÉTODO PARA LA CONSULTA AJAX (LIKE PUBLICACIÓN) */
+/* MÉTODO PARA LA CONSULTA AJAX (LIKE PUBLICACIÓN) *******************/
   public function likeAction($id=null){
     // Obtengo los datos del usuario logueado
     $user = $this->getUser();
-    // Busco dentro de la BD el dato según nuestra $id
+    // Cargo Entity Manager de Doctrine dentro de lavariable $em
     $em = $this->getDoctrine()->getManager();
+    // Cargo la entidad Publication dentro de $publication_repo
     $publication_repo = $em->getRepository('BackendBundle:Publication');
+    // Busco el registro por su $id
 		$publication = $publication_repo->find($id);
     // Creamos el nuevo objeto like
     $like = new Like();
@@ -34,6 +36,15 @@ class LikeController extends Controller
 		$flush = $em->flush();
 
     if ($flush == null) {
+      /* Sistema de notificaciones....................................*/
+      $notification = $this->get('app.notification_service');
+      $notification->set(
+        $publication->getUser(),
+        'like',
+        $user->getId(),
+        $publication->getId()
+      );
+      /****************************************************************/
 			$status = 'Te gusta esta publicación !!';
 		} else {
 			$status = 'No se ha podido guardar el me gusta !!';
@@ -41,8 +52,8 @@ class LikeController extends Controller
     // Para usar el método response es necesario cargar el componente
     return new Response($status);
 	}
-/********************************************************************/
-/* MÉTODO PARA LA CONSULTA AJAX (UNLIKE PUBLICACIÓN) */
+/*********************************************************************/
+/* MÉTODO PARA LA CONSULTA AJAX (UNLIKE PUBLICACIÓN) *****************/
   public function unlikeAction($id = null) {
     // Obtengo los datos del usuario logueado
     $user = $this->getUser();
@@ -67,6 +78,52 @@ class LikeController extends Controller
     }
     // Para usar el método response es necesario cargar el componente
     return new Response($status);
-}
-/********************************************************************/
+  }
+/*********************************************************************/
+/* MÉTODO PARA MOSTRAR LOS PERFILES QUE SIGUE UN PERFIL  *************/
+  public function likesAction(Request $request, $nickname = null){
+    // Cargo Entity Manager de Doctrine dentro de la variable $em
+    $em = $this->getDoctrine()->getManager();
+    /*
+     * Si $nickname es distinto de 'null' lo busco en la BD,
+     * si es null coloco el del usuario logueado
+     */
+    if ($nickname != null) {
+      // Cargo la entidad User dentro de $user_repo
+      $user_repo = $em->getRepository("BackendBundle:User");
+      // Busco el registro por su nick que será igual a $nickname
+      $user = $user_repo->findOneBy(array("nick" => $nickname));
+    } else {
+      // Cargo el usuario logueado
+      $user = $this->getUser();
+    }
+    /*
+     * Si el usuario que llega por la url está vacio o no es objeto
+     * si existe el objeto User nos rediriges a home
+     */
+    if (empty($user) || !is_object($user)) {
+      return $this->redirect($this->generateUrl('home_publications'));
+    }
+    /******************************************************************/
+    // Busco el $id del usuario señalado
+    $user_id = $user->getId();
+    // Realizo la consulta
+    $dql = "SELECT l FROM BackendBundle:Like l WHERE l.user = $user_id ORDER BY l.id DESC";
+    // Cargo la Query de la consulta $dql
+    $query = $em->createQuery($dql);
+    /*
+     * Iniciamos el paginador
+     */
+    $paginator = $this->get('knp_paginator');
+    $likes = $paginator->paginate(
+        $query, $request->query->getInt('page', 1), 5
+    );
+    /*****************************************************************/
+    // Devolvemos la vista con la información generado por el paginador
+    return $this->render('AppBundle:Like:likes.html.twig', array(
+      'user' => $user,
+      'pagination' => $likes
+    ));
+	}
+/*********************************************************************/
 }
