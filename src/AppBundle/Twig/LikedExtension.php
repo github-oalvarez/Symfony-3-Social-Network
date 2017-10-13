@@ -1,5 +1,5 @@
 <?php
-/*
+/* IMPORTANTE !!!!!!
  * No olvidar incluir la extensión de TWIG dentro de 'app\config\services.yml'
  */
 namespace AppBundle\Twig;
@@ -7,16 +7,15 @@ namespace AppBundle\Twig;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class LikedExtension extends \Twig_Extension{
-  /*
-   * Para usar 'Doctrine' necesiatmos de 'RegistryInterface'
-   */
+/* CARGAMOS DOCTRINE **************************************************************/
+  // Para usar 'Doctrine' necesiatmos de 'RegistryInterface'
   protected $doctrine;
 
   public function __construct(RegistryInterface $doctrine){
     $this->doctrine = $doctrine;
   }
-  /*********************************************************/
-  /* Función que hará de filtro */
+/**********************************************************************************/
+/* DEFINIMOS NOMBRE DEL FILTRO + FUNCIÓN FILTRO ***********************************/
   public function getFilters() {
 		return array(
       /*
@@ -26,6 +25,8 @@ class LikedExtension extends \Twig_Extension{
        new \Twig_SimpleFilter('liked', array($this, 'likeFilter'))
  		);
  	}
+/**********************************************************************************/
+/* FUNCIÓN FILTRO *****************************************************************/
   public function likeFilter($user, $publication){
     // cargamos el repositorio de Like
     $like_repo = $this->doctrine->getRepository('BackendBundle:Like');
@@ -45,7 +46,10 @@ class LikedExtension extends \Twig_Extension{
 		}
 		return $result;
 	}
+/**********************************************************************************/
+/* DEFINIMOS LA FUNCIÓN ***********************************************************/
 	public function getName() {
 		return 'liked_extension';
 	}
+/**********************************************************************************/
 }

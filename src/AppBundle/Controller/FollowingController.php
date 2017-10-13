@@ -22,66 +22,66 @@ class FollowingController extends Controller{
  */
   private $session;
   public function __construct(){
-     $this->session = new Session();
+    $this->session = new Session();
   }
 /*********************************************************************/
 /* MÉTODO EJECUCIÓN AJAX PARA HACER FOLLOW ***************************/
   public function followAction(Request $request){
-      // Capturamos los datos de nuestro usuario con el que estamos logueados
-     $user = $this->getUser();
-     // Almaceno en la variable $followed_id al usuario que voy a seguir
-     $followed_id = $request->get('followed');
-     $em = $this->getDoctrine()->getManager();// Cargo el Entity Manager
-     // Cargo el repositorio de la entidad Usuario
-     $user_repo = $em->getRepository('BackendBundle:User');
-     // Busco al usuario al que queremos seguir
-     $followed = $user_repo->find($followed_id);
-     $following = new Following();// Creo un objeto a partir de la entidad
-     $following->setUser($user); // Usuario que va a seguir
-     $following->setFollowed($followed);// Usuario Seguido
-     $em->persist($following);// Persistimos la query
-     $flush = $em->flush();// Incluimos los datos en la BD
-     if($flush == null){
-       /* Sistema de notificaciones....................................*/
-       $notification = $this->get('app.notification_service');
-       $notification->set(
-         $followed,
-         'follow',
-         $user->getId()
-       );
-       /****************************************************************/
-       $status = "Ahora estás siguiendo a este usuario!!";
-     }else{
-       $status = "No se ha podido seguir a este usuario";
-     }
-     // para usar Response es necesario incluir el componente
-     return new Response($status);
+    // Capturamos los datos de nuestro usuario con el que estamos logueados
+    $user = $this->getUser();
+    // Almaceno en la variable $followed_id al usuario que voy a seguir
+    $followed_id = $request->get('followed');
+    $em = $this->getDoctrine()->getManager();// Cargo el Entity Manager
+    // Cargo el repositorio de la entidad Usuario
+    $user_repo = $em->getRepository('BackendBundle:User');
+    // Busco al usuario al que queremos seguir
+    $followed = $user_repo->find($followed_id);
+    $following = new Following();// Creo un objeto a partir de la entidad
+    $following->setUser($user); // Usuario que va a seguir
+    $following->setFollowed($followed);// Usuario Seguido
+    $em->persist($following);// Persistimos la query
+    $flush = $em->flush();// Incluimos los datos en la BD
+    if($flush == null){
+      /* Sistema de notificaciones....................................*/
+      $notification = $this->get('app.notification_service');
+      $notification->set(
+        $followed,
+        'follow',
+        $user->getId()
+      );
+      /****************************************************************/
+      $status = "Ahora estás siguiendo a este usuario!!";
+    }else{
+      $status = "No se ha podido seguir a este usuario";
+    }
+    // para usar Response es necesario incluir el componente
+    return new Response($status);
   }
 /*********************************************************************/
 
 /* MÉTODO EJECUCIÓN AJAX PARA HACER UNFOLLOW *************************/
   public function unfollowAction(Request $request){
-      // Capturamos los datos de nuestro usuario con el que estamos logueados
-     $user = $this->getUser();
-     // Almaceno en la variable $followed_id al usuario que voy a seguir
-     $followed_id = $request->get('followed');
-     $em = $this->getDoctrine()->getManager();// Cargo el Entity Manager
-     // Sacamos el objeto que tiene el seguidor y seguido
-     $following_repo = $em->getRepository('BackendBundle:Following');
-     // Sacamos el registro de la tabla con las siguientes condiciones
-     $followed = $following_repo->findOneBy(array(
-       'user'=>$user,
-       'followed'=>$followed_id
-     ));
-     $em->remove($followed);// Elimina el registro del EM
-     $flush = $em->flush();// Incluimos los datos en la BD
-     if($flush == null){
-        $status = "Has dejado de Seguir a este usuario!!";
-     }else{
-        $status = "No has dejado de Seguir a este usuario";
-     }
-     // para usar Response es necesario incluir el componente
-     return new Response($status);
+    // Capturamos los datos de nuestro usuario con el que estamos logueados
+    $user = $this->getUser();
+    // Almaceno en la variable $followed_id al usuario que voy a seguir
+    $followed_id = $request->get('followed');
+    $em = $this->getDoctrine()->getManager();// Cargo el Entity Manager
+    // Sacamos el objeto que tiene el seguidor y seguido
+    $following_repo = $em->getRepository('BackendBundle:Following');
+    // Sacamos el registro de la tabla con las siguientes condiciones
+    $followed = $following_repo->findOneBy(array(
+      'user'=>$user,
+      'followed'=>$followed_id
+    ));
+    $em->remove($followed);// Elimina el registro del EM
+    $flush = $em->flush();// Incluimos los datos en la BD
+    if($flush == null){
+      $status = "Has dejado de Seguir a este usuario!!";
+    }else{
+      $status = "No has dejado de Seguir a este usuario";
+    }
+    // para usar Response es necesario incluir el componente
+    return new Response($status);
   }
 /*********************************************************************/
 

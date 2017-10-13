@@ -1,5 +1,5 @@
 <?php
-/*
+/* IMPORTANTE !!!!!!
  * No olvidar incluir la extensión del SERVICIO  dentro de 'app\config\services.yml'
  */
 namespace AppBundle\Services;
@@ -7,17 +7,17 @@ namespace AppBundle\Services;
 use BackendBundle\Entity\Notification;    // Da acceso a la Entidad Usuario
 
 class NotificationService{
-  /* OBJETO MANAGER
+/* CARGAMOS EL ENTITY MANAGER DE DOCTRINE *****************************************/
+  /*
    * Para el correcto funcionamiento es necesario incluir la
    * variable $manager de doctrine
    */
   public $manager;
-
   public function __construct($manager) {
 		$this->manager = $manager;
 	}
-/********************************************************************/
-/* MÉTODO PARA CREAR NOTIFICACIONES**********************************/
+/**********************************************************************************/
+/* MÉTODO PARA GUARDAR LAS NOTIFICACIONES EN LA BD ********************************/
   public function set($user, $type, $typeId, $extra = null){
     // $user el usuario para el que va la notificación
     // $type tipo de notificación
@@ -41,14 +41,12 @@ class NotificationService{
     if($flush == null){$status = true;}else{$status = false;}
     return $status;
   }
-/********************************************************************/
-/* MÉTODO PARA LEER NOTIFICACIONES***********************************/
+/**********************************************************************************/
+/* MÉTODO PARA LEER LAS NOTIFICACIONES DE LA BD ***********************************/
   public function read($user){
     $em = $this->manager;
-
     $notification_repo = $em->getRepository('BackendBundle:Notification');
     $notifications = $notification_repo->findBy(array('user' => $user));
-
     foreach($notifications as $notification){
       $notification->setReaded(1);
       $em->persist($notification);
@@ -60,7 +58,6 @@ class NotificationService{
     }else{
       return false;
     }
-
     return true;
   }
 }

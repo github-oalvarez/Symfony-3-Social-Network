@@ -6,7 +6,7 @@ namespace AppBundle\Twig;
 // Activo 'RegistryInterface' para poder usar Doctrine
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class FollowingExtension extends \Twig_Extension{
+class GetUserExtension extends \Twig_Extension{
 /* CARGAMOS DOCTRINE **************************************************************/
   // Para usar 'Doctrine' necesiatmos de 'RegistryInterface'
   protected $doctrine;
@@ -16,34 +16,38 @@ class FollowingExtension extends \Twig_Extension{
   }
 /**********************************************************************************/
 /* DEFINIMOS NOMBRE DEL FILTRO + FUNCIÓN FILTRO ***********************************/
-  public function getFilters(){
-    return array(
+  public function getFilters() {
+		return array(
       /*
-       * indicamos como llamaremos al filtro `following'
-       * y que función ejecutará el filtro `followingFilter`
+       * indicamos como llamaremos al filtro 'get_user'
+       * y que función ejecutará el filtro `getUserFilter`
        */
-      new \Twig_SimpleFilter('following', array($this, 'followingFilter'))
-    );
-  }
+       new \Twig_SimpleFilter('get_user', array($this, 'getUserFilter'))
+ 		);
+ 	}
 /**********************************************************************************/
 /* FUNCIÓN FILTRO *****************************************************************/
-  public function followingFilter($user, $followed){
-    $following_repo = $this->doctrine->getRepository('BackendBundle:Following');
-    $user_following = $following_repo->findOneBy(array(
-      "user"=>$user,
-      "followed"=>$followed
-    ));
-    if(!empty($user_following) && is_object($user_following)){
-      $result=true;
-    }else{
-      $result=false;
-    }
-    return $result;
-  }
+  public function getUserFilter($user_id){
+    // cargamos el repositorio de Like
+    $user_repo = $this->doctrine->getRepository('BackendBundle:User');
+    /*
+     * buscamos un registro que comparta el $user_id introducida en el método
+     */
+    $user = $user_repo->findOneBy(array(
+ 			"id" => $user_id,
+ 		));
+    // Si no está vacio
+    if(!empty($user) && is_object($user)){
+			$result = $user;
+		}else{
+			$result = false;
+		}
+		return $result;
+	}
 /**********************************************************************************/
 /* DEFINIMOS LA FUNCIÓN ***********************************************************/
-  public function getName(){
-    return 'following_extension';
-  }
+	public function getName() {
+		return 'get_user_extension';
+	}
 /**********************************************************************************/
 }

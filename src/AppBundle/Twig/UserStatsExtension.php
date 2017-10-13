@@ -1,5 +1,5 @@
 <?php
-/*
+/* IMPORTANTE !!!!!!
  * No olvidar incluir la extensión de TWIG dentro de 'app\config\services.yml'
  */
 namespace AppBundle\Twig;
@@ -7,16 +7,14 @@ namespace AppBundle\Twig;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class UserStatsExtension extends \Twig_Extension{
-  /*
-   * Para usar 'Doctrine' necesiatmos de 'RegistryInterface'
-   */
+/* CARGAMOS DOCTRINE **************************************************************/
+  // Para usar 'Doctrine' necesiatmos de 'RegistryInterface'
   protected $doctrine;
-
   public function __construct(RegistryInterface $doctrine){
     $this->doctrine = $doctrine;
   }
-  /*********************************************************/
-  /* Función que hará de filtro */
+/**********************************************************************************/
+/* DEFINIMOS NOMBRE DEL FILTRO + FUNCIÓN FILTRO ***********************************/
   public function getFilters(){
     return array(
       /*
@@ -26,6 +24,8 @@ class UserStatsExtension extends \Twig_Extension{
       new \Twig_SimpleFilter('user_stats', array($this, 'userStatsFilter'))
     );
   }
+/**********************************************************************************/
+/* FUNCIÓN FILTRO *****************************************************************/
   public function userStatsFilter($user){
     // cargamos el repositorio de Like
     $like_repo = $this->doctrine->getRepository('BackendBundle:Like');
@@ -51,8 +51,10 @@ class UserStatsExtension extends \Twig_Extension{
      );
      return $result;
    }
-  /*********************************************************/
+/**********************************************************************************/
+/* DEFINIMOS LA FUNCIÓN ***********************************************************/
   public function getName(){
     return 'user_stats_extension';
   }
+/**********************************************************************************/
 }

@@ -2,8 +2,9 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    # IMPORTAMOS BACKENDBUNDLE......................................................................... #
     - { resource: "@BackendBundle/Resources/config/services.yml" }
-
+    # .........................................................................IMPORTAMOS BACKENDBUNDLE #
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
@@ -69,7 +70,7 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-# KNP-PAGINATOR-BUNDLE
+# KNP-PAGINATOR-BUNDLE................................................................................. #
 # https://victorroblesweb.es/2016/02/27/paginacion-con-knppaginatorbundle-en-symfony3/
 knp_paginator:
     page_range: 5                       # rango por defecto de paginas en los controles del paginador
@@ -85,3 +86,4 @@ knp_paginator:
         # Indicamos la ruta donde se encontrará la plantilla
         pagination: AppBundle:Layouts:custom_pagination.html.twig  # plantilla controles
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # plantilla links ordenación
+# .................................................................................KNP-PAGINATOR-BUNDLE #

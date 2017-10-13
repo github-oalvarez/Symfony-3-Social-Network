@@ -1,0 +1,8 @@
+# ROUTING PARA PUBLICACIONES
+notifications_page:
+    path: /notifications
+    defaults: { _controller: AppBundle:Notification:index }
+# ROUTING PARA CONSULTA AJAX (GENERAR ALERTAS)
+notifications_ajax:
+    path: /notifications/get
+    defaults: { _controller: AppBundle:Notification:countNotifications }

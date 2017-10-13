@@ -1,10 +1,12 @@
 <?php
-/*
+/* IMPORTANTE !!!!!!
  * No olvidar incluir la extensión de TWIG dentro de 'app\config\services.yml'
  */
 namespace AppBundle\Twig;
 
 class LongTimeExtension extends \Twig_Extension{
+/**********************************************************************************/
+/* DEFINIMOS NOMBRE DEL FILTRO + FUNCIÓN FILTRO ***********************************/
 // nombre del filtro será 'long_time'
   public function getFilters(){
     return array(
@@ -15,6 +17,8 @@ class LongTimeExtension extends \Twig_Extension{
       new \Twig_SimpleFilter('long_time', array($this, 'LongTimeFilter')),
     );
   }
+/**********************************************************************************/
+/* FUNCIÓN FILTRO *****************************************************************/
   /* Función que hará de filtro */
   /*
    * Incluyo el filtro que convierte la fecha a diferencia de tiempo
@@ -24,10 +28,8 @@ class LongTimeExtension extends \Twig_Extension{
 		if ($date == null) {
 			return "Sin fecha";
 		}
-
 		$start_date = $date;
 		$since_start = $start_date->diff(new \DateTime(date("Y-m-d") . " " . date("H:i:s")));
-
 		if ($since_start->y == 0) {
 			if ($since_start->m == 0) {
 				if ($since_start->d == 0) {
@@ -77,12 +79,12 @@ class LongTimeExtension extends \Twig_Extension{
 				$result = $since_start->y . ' años';
 			}
 		}
-
 		return "Hace " . $result;
 	}
-
+/**********************************************************************************/
+/* DEFINIMOS LA FUNCIÓN ***********************************************************/
 	public function getName(){
 		return 'long_time_extension';
 	}
-
+/**********************************************************************************/
 }

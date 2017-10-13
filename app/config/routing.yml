@@ -1,7 +1,10 @@
+# DIRECCIÓN DEL ENRUTADOR GLOBAL................................................
 app:
     resource: '@AppBundle/Resources/config/routing.yml'
     prefix:   /
-
+#...............................................................................
+# GESTIONAREMOS EL ENRUTADOR MEDIANTE '@AppBundle/Resources/config/routing.yml'
+# PARA PODER CENTRALIZARLO......................................................
 #backend:
 #    resource: "@BackendBundle/Resources/config/routing.yml"
 #    prefix:   /

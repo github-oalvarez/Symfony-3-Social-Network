@@ -1,0 +1,40 @@
+{# EXTENDEMOS LA PLANTILLA 'AppBundle:Layouts:layout.html.twig'...................... #}
+  {% extends "AppBundle:Layouts:layout.html.twig"%}
+{# ......................EXTENDEMOS LA PLANTILLA 'AppBundle:Layouts:layout.html.twig' #}
+{% block content %}
+  <div class="container">
+    <div class="col-lg-12 box-default box-notifications">
+      <h1 class="box-header">Notificaciones</h1>
+      <div class="box-content">
+        {# LISTAREMOS LAS NOTIFICACIONES ............................................ #}
+          {% for notification in pagination%}
+            <div class="col-lg-12 notification-item">
+              <div class="alert alert-default">
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                {# Conseguimos el NICK del usuario por SU OBJETO COMPLETO CON TWIG  #}
+                {# Crearemos una nueva extensión de TWIG
+                   src\AppBundle\Twig\GetUserExtension.php #}
+                {# La registramos dentro de app\config\services.yml #}
+                {# CREO UNA VARIABLE CON LOS DATOS CREADOS POR EL FILTRO 'GET_USER' #}
+                {% set notu = notification.typeId|get_user %}
+                {# FILTRO LOS TIPOS DE NOTIFICACIONES............................ #}
+                  {%if notification.type == "follow"%}
+                        <a href="{{ path("user_profile",{'nickname': notu.nick}) }}">
+                          {{notu.name}} {{notu.surname}}
+                        </a> te está siguiendo
+                  {%endif%}
+                  {%if notification.type == "like"%}
+                        <a href="{{ path("user_profile",{'nickname': notu.nick}) }}">
+                          {{notu.name}} {{notu.surname}}
+                        </a> le ha dado me gusta a una de tus publicaciones
+                  {%endif%}
+                {# ............................FILTRO LOS TIPOS DE NOTIFICACIONES #}
+              </div>
+            </div>
+          {% endfor %}
+        {# .............................................LISTAREMOS LAS NOTIFICACIONES #}
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
