@@ -65,23 +65,9 @@ class RegisterType extends AbstractType
 //          ->add('role')->add('bio')->add('active')->add('image');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'BackendBundle\Entity\User'
-        ));
+    /**************************************************************************************/
+    /* DEFINIMOS LA ENTIDAD DONDE SE INCLUIRAN LOS DATOS EN LA BD *************************/
+    public function configureOptions(OptionsResolver $resolver)    {
+        $resolver->setDefaults(array('data_class' => 'BackendBundle\Entity\User'));
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'backendbundle_user';
-    }
-
-
 }

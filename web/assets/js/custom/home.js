@@ -1,5 +1,5 @@
 /* FUNCIÓN PARA LISTAR PUBLICACIONES SCROLL INFINITO... */
-// Escuchamos el documento y activamos la función
+// Cuando la  página haya cargado...
 $(document).ready(function(){
   /*
    * Usando alert("USERS"); sabremos si hemos

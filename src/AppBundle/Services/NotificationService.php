@@ -18,6 +18,7 @@ class NotificationService{
 	}
 /**********************************************************************************/
 /* MÉTODO PARA GUARDAR LAS NOTIFICACIONES EN LA BD ********************************/
+// Usaremos este método dentro de 'src\AppBundle\Controller\LikeController.php'
   public function set($user, $type, $typeId, $extra = null){
     // $user el usuario para el que va la notificación
     // $type tipo de notificación
@@ -43,21 +44,24 @@ class NotificationService{
   }
 /**********************************************************************************/
 /* MÉTODO PARA LEER LAS NOTIFICACIONES DE LA BD ***********************************/
+// Usaremos este método dentro de 'src\AppBundle\Controller\NotificationController.php'
   public function read($user){
+    // $user el usuario para el que va la notificación
+    // Cargamos el Entity Manager
     $em = $this->manager;
+    // Extraemos el repositorio de las Notification de su entidad
     $notification_repo = $em->getRepository('BackendBundle:Notification');
+    // Buscamos todas las notificaciones del usuario
     $notifications = $notification_repo->findBy(array('user' => $user));
+    // Recorremos todas las notificaciones encontradas
     foreach($notifications as $notification){
-      $notification->setReaded(1);
-      $em->persist($notification);
+      $notification->setReaded(1);  // Cambiamos el valor de Readed (leido)
+      $em->persist($notification);  // Persistimos las modificaciones en la BD
     }
+    // Subimos las modificaciones a la BD
     $flush = $em->flush();
-
-    if($flush == null){
-      return true;
-    }else{
-      return false;
-    }
-    return true;
+    // Si se subieron los cambios a la BD correctamente...
+    if($flush == null){ return true; }else{ return false; }
   }
+/**********************************************************************************/
 }

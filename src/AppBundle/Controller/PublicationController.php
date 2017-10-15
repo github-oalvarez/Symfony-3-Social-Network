@@ -1,34 +1,31 @@
 <?php
 // namespace BackendBundle\Form;
 
-/* Cambiamos el namespace al cambiar el Bundle                     ************************/
+/* Cambiamos el namespace al cambiar el Bundle *****************************************************/
   namespace AppBundle\Controller;
-/******************************************************************************************/
+/***************************************************************************************************/
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-/* Añadimos los componentes que permitirán el uso de nuevas clases ************************/
-  use Symfony\Component\HttpFoundation\Response;
+/* Añadimos los componentes que permitirán el uso de nuevas clases *********************************/
+  use Symfony\Component\HttpFoundation\Response;           // Permite usar el método Response
   use Symfony\Component\HttpFoundation\Session\Session;    // Permite usar sesiones
   use AppBundle\Form\PublicationType;                      // Da acceso al Formulario PublicationType
   use BackendBundle\Entity\Publication;                    // Da acceso a la Entidad Publication
-/******************************************************************************************/
-class PublicationController extends Controller
-{
-
+/***************************************************************************************************/
+class PublicationController extends Controller{
 /* OBJETO SESSIÓN
- * Para activar las sesiones inicializamos la variable e incluimos
- * en ella el objeto Session()
- * No olvidar dar acceso al componenete de Symfony
- * Session() permitirá usar los mensajes FLASHBAG
- */
+   * Para activar las sesiones inicializamos la variable e incluimos
+   * en ella el objeto Session()
+   * No olvidar dar acceso al componenete de Symfony
+   * Session() permitirá usar los mensajes FLASHBAG
+   */
   private $session;
   public function __construct(){
         $this->session = new Session();
       }
-/********************************************************************/
-
-/* MÉTODO PARA LA HOME  *********************************************/
+/***************************************************************************************************/
+/* MÉTODO PARA LA HOME  ****************************************************************************/
   public function indexAction(Request $request){
 		$em = $this->getDoctrine()->getManager();
     $user = $this->getUser(); //capturamos el usuario
@@ -39,42 +36,49 @@ class PublicationController extends Controller
     $form->handleRequest($request);
     // Plantemos los distinos escenarios
     if($form->isSubmitted() && $form->isValid()){
-      // Subimos la imagen
+      /*********************************************************************************************/
+      /* SUBIMOS LA IMAGEN *************************************************************************/
       $file = $form['image']->getData();
-      if(!empty($file) && $file != null){
-        $ext = $file->guessExtension();//capturamos la extensión del fichero
+      if( !empty($file) && $file != null ){
+        //capturamos la extensión del fichero
+        $ext = $file->guessExtension();
+      }
+      if(
+        !empty($file)
+        && $file != null
         // comprobamos la extensión del fichero
-        if($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif'){
+        && ($ext == 'jpg' || $ext == 'jpeg' || $ext == 'png' || $ext == 'gif')){
           // Damos nombre al archivo
           $file_name = $user->getId().time().".".$ext;
           // Subimos el archivo al hosting
           $file->move("uploads/publications/images", $file_name);
           // Guardamos el nombre del fichero en la BD
           $publication->setImage($file_name);
-        }else{
-          $publication->setImage(null);
-        }
       }else{
         $publication->setImage(null);
       }
-      // Subimos los documentos
+      /*********************************************************************************************/
+      /* SUBIMOS EL DOCUMENTO *********************************************************************/
       $doc = $form['document']->getData();
-      if(!empty($doc) && $doc!=null){
-        $ext = $doc->guessExtension(); //capturamos la extensión del fichero
+      if( !empty($doc) && $doc != null ){
+        //capturamos la extensión del fichero
+        $ext = $doc->guessExtension();
+      }
+      if(
+        !empty($doc)
+        && $doc!=null
         // comprobamos la extensión del fichero
-        if($ext=='pdf'){
+        && ($ext=='pdf')){
           // Damos nombre al archivo
           $file_name=$user->getId().time().'.'.$ext;
           // Subimos el archivo al hosting
           $doc->move('uploads/publications/documents',$file_name);
           // Guardamos el nombre del fichero en la BD
           $publication->setDocument($file_name);
-        }else{
-          $publication->setDocument(null);
-        }
       }else{
         $publication->setDocument(null);
       }
+      /*********************************************************************************************/
       // subimos los datos usando los setters
       $publication->setUser($user);
       $publication->setCreatedAt(new \DateTime("now"));
@@ -91,12 +95,14 @@ class PublicationController extends Controller
     }else{
       $status = 'La publicación no se ha creado, porque el formulario no es válido';
     }
+    /* MOSTRAR FLASHBAG ***************************************************************************/
     // Si seenvió el formulario mostrar las FlashBag
     if($form->isSubmitted()){
       // generamos los mensajes FLASH (necesario activar las sesiones)
       $this->session->getFlashBag()->add('status', $status);
       return $this->redirectToRoute('home_publication');
     }
+    /***********************************************************************************************/
     /*
      * Cargamos el método auxiliar que lista las publicaciones
      * 'getPublications'
@@ -107,13 +113,12 @@ class PublicationController extends Controller
  			'pagination' => $publications
  		));
 	}
-/********************************************************************/
-
-/* MÉTODO AUXILIAR PARA EXTRAER LAS PUBLICACIONES PUBLICADAS ********/
+/***************************************************************************************************/
+/* MÉTODO AUXILIAR PARA EXTRAER LAS PUBLICACIONES PUBLICADAS ***************************************/
   /*
-  USE curso_social_network;
-  SELECT text FROM publications WHERE user_id = 6
-    OR user_id IN (SELECT followed FORM following WHERE user = 6)
+  * USE curso_social_network;
+  * SELECT text FROM publications WHERE user_id = 6
+  *  OR user_id IN (SELECT followed FORM following WHERE user = 6)
   * (SELECT followed FORM following WHERE user = 6) extrae el listado
   * de usuarios a los que sigo
   */
@@ -152,9 +157,9 @@ class PublicationController extends Controller
     // devolvemos la variable '$paginator'
     return $pagination;
   }
-/********************************************************************/
+/***************************************************************************************************/
 
-/* MÉTODO AJAX PARA ELIMINAR LAS PUBLICACIONES PUBLICADAS ***********/
+/* MÉTODO AJAX PARA ELIMINAR LAS PUBLICACIONES PUBLICADAS ******************************************/
   public function removePublicationAction(Request $request, $id = null){
     // Extraemos el entity manager
 		$em = $this->getDoctrine()->getManager();
@@ -186,5 +191,5 @@ class PublicationController extends Controller
     // para usar el objeto response es necesario cargarlo al ppio del controlador
 		return new Response($status);
 	}
-/********************************************************************/
+/***************************************************************************************************/
 }

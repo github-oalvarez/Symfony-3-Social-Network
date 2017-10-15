@@ -1,4 +1,4 @@
-# ROUTING PARA PUBLICACIONES
+# ROUTING PARA NOTIFICACIONES GENERALES
 notifications_page:
     path: /notifications
     defaults: { _controller: AppBundle:Notification:index }

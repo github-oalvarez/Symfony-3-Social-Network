@@ -74,26 +74,9 @@ class UserType extends AbstractType
           ));
 //          ->add('role')->add('bio')->add('active')->add('image');
     }
-
-    /**
-     * {@inheritdoc}
-     */
-
-/* MÉTODO PARA INDICAR QUE EL FORMULARIO PERTENECE A LA ENTIDAD USUARIO ********************/
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'BackendBundle\Entity\User'
-        ));
+    /**************************************************************************************/
+    /* DEFINIMOS LA ENTIDAD DONDE SE INCLUIRAN LOS DATOS EN LA BD *************************/
+    public function configureOptions(OptionsResolver $resolver){
+        $resolver->setDefaults(array('data_class' => 'BackendBundle\Entity\User'));
     }
-/******************************************************************************************/
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'backendbundle_user';
-    }
-
-
 }

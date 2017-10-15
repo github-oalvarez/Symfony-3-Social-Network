@@ -14,13 +14,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 /******************************************************************************************/
-class PublicationType extends AbstractType
-{
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder
-        // 'text' será el nombre de la columna de la base de datos
-        ->add('text', TextareaType::class, array(
+class PublicationType extends AbstractType{
+    public function buildForm(FormBuilderInterface $builder, array $options){
+      $builder
+      // 'text' será el nombre de la columna de la base de datos
+      ->add('text', TextareaType::class, array(
 				'label' => 'Mensaje',
 				'required' => 'required',
 				'attr' => array(
@@ -43,18 +41,16 @@ class PublicationType extends AbstractType
 					'class' => 'form-control'
 				)
 			))
-            ->add('Enviar', SubmitType::class, array(
+      ->add('Enviar', SubmitType::class, array(
 				"attr" => array(
 					"class" => "btn btn-success"
 				)
-			))
-        ;
+			));
     }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'BackendBundle\Entity\Publication'
-        ));
+    /**************************************************************************************/
+    /* DEFINIMOS LA ENTIDAD DONDE SE INCLUIRAN LOS DATOS EN LA BD *************************/
+    public function configureOptions(OptionsResolver $resolver)    {
+        $resolver->setDefaults(array('data_class' => 'BackendBundle\Entity\Publication'));
     }
+    /*************************************************************************************/
 }

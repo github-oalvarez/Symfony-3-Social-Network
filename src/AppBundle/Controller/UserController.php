@@ -25,14 +25,14 @@ class UserController extends Controller{
     public function __construct(){
       $this->session = new Session();
     }
-/********************************************************************/
-/* MÉTODO PARA EL LOGIN *********************************************/
+/******************************************************************************************/
+/* MÉTODO PARA EL LOGIN *******************************************************************/
   public function loginAction(Request $request){
     /* si existe el objeto User nos rediriges a home            */
     if( is_object($this->getUser()) ){
       return $this->redirect('home');
     }
-    /************************************************************/
+    /**********************************************************************************/
     $authenticationUtils = $this->get('security.authentication_utils');
     $error = $authenticationUtils->getLastAuthenticationError();
     $lastUsername = $authenticationUtils->getLastUsername();
@@ -40,15 +40,14 @@ class UserController extends Controller{
         'lastUsername'=>$lastUsername,
         'error'=>$error ));
   }
-/********************************************************************/
-
-/* MÉTODO PARA EL REGISTRO DE USUARIO *******************************/
+/******************************************************************************************/
+/* MÉTODO PARA EL REGISTRO DE USUARIO *****************************************************/
   public function registerAction(Request $request){
     /* si existe el objeto User nos rediriges a home            */
     if(is_object($this->getUser())){
       return $this->redirect('home');
     }
-    /************************************************************/
+    /*************************************************************************************/
     // Creamos un nuevo objeto User
     $user = new User();
     /*
@@ -108,9 +107,8 @@ class UserController extends Controller{
       'form'=>$form->createView()
     ));
   }
-/********************************************************************/
-
-/* MÉTODO PARA LA CONSULTA AJAX (¿EXISTE EL NICK DE REGISTRO?) */
+/******************************************************************************************/
+/* MÉTODO PARA LA CONSULTA AJAX (¿EXISTE EL NICK DE REGISTRO?) ****************************/
   public function nickTestAction(Request $request){
     // Guardamos dentro de la variable $nick el dato que nos llega por POST
     $nick = $request->get('nick');
@@ -127,9 +125,8 @@ class UserController extends Controller{
     // Para usar el método response es necesario cargar el componente
     return new Response($result);
   }
-/********************************************************************/
-
-/* MÉTODO PARA CONFIGURAR EL PERFIL DE USUARIO */
+/******************************************************************************************/
+/* MÉTODO PARA CONFIGURAR EL PERFIL DE USUARIO ********************************************/
   public function editUserAction(Request $request){
     //  al cargar la variable user se cargarán los datos existentes dentro del formulario.
     $user = $this->getUser();
@@ -200,15 +197,14 @@ class UserController extends Controller{
       "form"=>$form->createView()
     ));
   }
-/********************************************************************/
-
+/******************************************************************************************/
 /* MÉTODO PARA LISTAR USUARIOS */
   public function usersAction(Request $request){
     /* si existe el objeto User nos rediriges a home            */
     if( !is_object($this->getUser()) ){
       return $this->redirect('home');
     }
-    /************************************************************/
+    /*************************************************************************************/
     $em = $this->getDoctrine()->getManager();
     $dql = "SELECT u FROM BackendBundle:User u ORDER BY u.id ASC";
     $query = $em->createQuery($dql);
@@ -219,15 +215,12 @@ class UserController extends Controller{
       5 );
     return $this->render('AppBundle:User:users.html.twig', array('pagination'=>$pagination));
   }
-/********************************************************************/
-
-/* MÉTODO PARA BUSCAR USUARIOS */
+/******************************************************************************************/
+/* MÉTODO PARA BUSCAR USUARIOS ************************************************************/
   public function searchAction(Request $request){
     /* si existe el objeto User nos rediriges a home            */
-    if( !is_object($this->getUser()) ){
-      return $this->redirect('home');
-    }
-    /************************************************************/
+    if( !is_object($this->getUser()) ){ return $this->redirect('home'); }
+    /************************************************************************************/
     $em = $this->getDoctrine()->getManager();
     // usamos 'trim' para limpiar los espacios por delante ypor detrás
     $search = trim($request->query->get("search", null));
@@ -250,9 +243,8 @@ class UserController extends Controller{
     // Devolvemos la vista con la información generado por el paginador
     return $this->render('AppBundle:User:users.html.twig', array('pagination'=>$pagination));
   }
-  /********************************************************************/
-
-  /* MÉTODO PARA MOSTRAR EL PERFIL DE USUARIO */
+/******************************************************************************************/
+/* MÉTODO PARA MOSTRAR EL PERFIL DE USUARIO ***********************************************/
   public function profileAction(Request $request, $nickname = null){
     // Cargo Entity Manager de Doctrine dentro de lavariable $em
     $em = $this->getDoctrine()->getManager();
@@ -275,7 +267,7 @@ class UserController extends Controller{
     if (empty($user) || !is_object($user)) {
 			return $this->redirect($this->generateUrl('home_publications'));
 		}
-    /************************************************************/
+    /*************************************************************************************/
     // Busco el $id del usuario señalado
     $user_id = $user->getId();
     // Realizo la consulta
@@ -289,13 +281,13 @@ class UserController extends Controller{
 		$publications = $paginator->paginate(
 				$query, $request->query->getInt('page', 1), 5
 		);
-    /************************************************************/
+    /*************************************************************************************/
     // Devolvemos la vista con la información generado por el paginador
     return $this->render('AppBundle:User:profile.html.twig', array(
 			'user' => $user,
 			'pagination' => $publications
 		));
   }
-  /********************************************************************/
+/******************************************************************************************/
 
 }

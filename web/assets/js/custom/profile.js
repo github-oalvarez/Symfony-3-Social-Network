@@ -26,9 +26,11 @@ $(document).ready(function(){
   }));
   ias.on('ready', function(event){
     buttons();
+    followButtons(); // Función que registra el follow
   });
   ias.on('rendered', function(event){
     buttons();
+    followButtons(); // Función que registra el follow
   });
 });
 /*************************************************************/

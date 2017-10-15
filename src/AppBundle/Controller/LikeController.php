@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 /* Añadimos los componentes que permitirán el uso de nuevas clases *********************************/
-  use Symfony\Component\HttpFoundation\Response;
+  use Symfony\Component\HttpFoundation\Response;        // Permite usar el método Response
   use Symfony\Component\HttpFoundation\Session\Session; // Permite usar sesiones
   use AppBundle\Form\PublicationType;                   // Da acceso al Formulario PublicationType
   use BackendBundle\Entity\Publication;                 // Da acceso a la Entidad Publication
@@ -36,9 +36,10 @@ class LikeController extends Controller
 		$flush = $em->flush();
 
     if ($flush == null) {
-      /* Sistema de notificaciones......*************************************************************/
+      /* NOTIFICACIONES ******************************************************************************/
       /*
-       * Cargamos el SERVICIO NOTIFICACIONES
+       * Iniciamos el servicio 'app.notification_service' declarado dentro de 'app\config\services.yml'
+       * ver el método 'read' dentro de 'src\AppBundle\Services\NotificationService.php'
        * ( Ver 'app\config\services.yml', 'src\AppBundle\Services\NotificationService.php' y
        * 'src\AppBundle\Controller\NotificationController.php' )
        */

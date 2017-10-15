@@ -9,7 +9,6 @@
       <link href="{{ asset ('assets/css/styles.css')}}" type="text/css" rel="stylesheet">
     {% endblock %}
     {% block javascripts %}
-      {# ............................PODEMOS CAMBIAR LAS ETIQUETAS DE NAVEGACIÓN AQUÍ #}
       {# JAVASCRIPT PARA OBTENER LA URL.............................................. #}
         <script type="text/javascript">
             //var URL = "{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php";
@@ -21,6 +20,9 @@
       {# SCRIPT QUE PERMITE USAR EL SCROLL INFINITO DE CARGA DE UN LISTADO........... #}
         <script src="{{ asset ('assets/js/jquery-ias.min.js')}}"></script>
       {# ...........SCRIPT QUE PERMITE USAR EL SCROLL INFINITO DE CARGA DE UN LISTADO #}
+      {# JAVASCRIPT PARA GESTIONAR LAS NOTIFICACIONES................................ #}
+        <script type="text/javascript" src="{{ asset('assets/js/custom/common.js') }}"></script>
+      {# ................................JAVASCRIPT PARA GESTIONAR LAS NOTIFICACIONES #}
     {% endblock %}
   </head>
   <body>
@@ -93,10 +95,15 @@
               {% if app.user != null %}
                 <ul class="nav navbar-nav navbar-right">
                   <li>
-                    <a href="{{path("user_edit")}}">
+                    <a href="{{path("private_message_index")}}">
                       <span class="glyphicon glyphicon-envelope" aria-hidden="true">
                       </span>
                       &nbsp;Mensajes Privados
+                      {# MOSTRAMOS EL NÚMERO DE NOTIFICACIONES PENDIENTES DE LEER.... #}
+                        <span class="label label-success label-notifications-msg">
+                          <!-- NO IMPORTA EL TEXTO QUE METAMOS EL JAVASCRIPT LO SUSTITUIRÁ -->
+                        </span>
+                      {# ....MOSTRAMOS EL NÚMERO DE NOTIFICACIONES PENDIENTES DE LEER #}
                     </a>
                   </li>
                   <li>
@@ -104,6 +111,11 @@
                       <span class="glyphicon glyphicon-bell" aria-hidden="true">
                       </span>
                       &nbsp;Notificaciones
+                      {# MOSTRAMOS EL NÚMERO DE NOTIFICACIONES PENDIENTES DE LEER.... #}
+                        <span class="label label-success label-notifications">
+                          <!-- NO IMPORTA EL TEXTO QUE METAMOS EL JAVASCRIPT LO SUSTITUIRÁ -->
+                        </span>
+                      {# ....MOSTRAMOS EL NÚMERO DE NOTIFICACIONES PENDIENTES DE LEER #}
                     </a>
                   </li>
                   <li class="dropdown">

@@ -1,6 +1,16 @@
 BackendBundle\Entity\User:
     type: entity
     table: users
+    # Indicamos la ubicación del repositorio que hará la consulta
+    #
+    # Usamos la propiedad 'empty_data' para pasar la variable
+    # ( viene de 'src\AppBundle\Controller\PrivateMessageController.php',
+    # 'src\AppBundle\form\PrivateMessageType.php',
+    # 'src\BackendBundle\Repository\UserRepository.php' y
+    # 'src\BackendBundle\Resources\config\doctrine\user.orm.yml')
+    #
+    repositoryClass: BackendBundle\Repository\UserRepository
+    #########################################################################
     uniqueConstraints:
         users_uniques_fields:
             columns:
