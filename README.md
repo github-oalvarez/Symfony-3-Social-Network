@@ -114,7 +114,7 @@ CONSTRAINT fk_notifications_users FOREIGN KEY(user_id) references users(id)
 
 *Nota<sup>1</sup>*: Si queremos generar una nueva entidad usaremos `php bin/console doctrine:generate:entity`
 
-*Nota<sup>2</sup>*: Si previamente ya subimos la base de datos al servidor (como en este caso) y queremos importar su configuración a nuestro bundle, **BackendBundle** usaremos `php bin/console doctrine:mapping:import BackendBundle yml` (Así mapearemos la base de datos y crearemos nuestra entidad en Symfony).
+*Nota<sup>2</sup>*: Si previamente ya subimos la base de datos al servidor (como en este caso) y queremos importar su configuración a nuestro bundle, **BackendBundle** usaremos `php bin/console doctrine:mapping:import BackendBundle yml` (Así mapearemos la base de datos y crearemos nuestra entidad en Symfony). 
 
 -------------------------------------------------------------------------
 
@@ -125,6 +125,8 @@ CONSTRAINT fk_notifications_users FOREIGN KEY(user_id) references users(id)
 ----------------------------
 
 Actualizamos composer con los paquetes nuevos usando `composer update`, para a continuación crear el *Bundle* **BackendBundle**, mediante el comando de consola: `php bin/console generate:bundle`.
+
+* Usaremos `php bin/console generate:bundle --namespace=BackendBundle --format=yml` para prefijar la configuración del nuevo **Bundle**.
 
 | Are you planning on sharing this bundle across multiple applications?           | [no]: no       |
 |:--------------------------------------------------------------------------------|----------------|
@@ -165,7 +167,7 @@ y lo sustituimos por:
 ```
 
 | MUY IMPORTANTE | ejecutar `composer dump-autoload` para ejecutar la función autoload. |
-|----------------|----------------------------------------------------------------------------------------------------------------|
+|----------------|----------------------------------------------------------------------|
 
 -----------------------------------------------------------------------------------------------------
 
