@@ -2,228 +2,45 @@
 
 namespace BackendBundle\Entity;
 
-/**
- * PrivateMessage
- */
-class PrivateMessage
-{
-    /**
-     * @var integer
-     */
+class PrivateMessage {
+/* Id de la Tabla ****************************************************************/    
     private $id;
-
-    /**
-     * @var string
-     */
+    public function getId() { return $this->id; }
+/*********************************************************************************/    
+/* message ***********************************************************************/  
     private $message;
-
-    /**
-     * @var string
-     */
+    public function setMessage($message) { $this->message = $message; return $this; } 
+    public function getMessage() { return $this->message; } 
+/*********************************************************************************/    
+/* file **************************************************************************/
     private $file;
-
-    /**
-     * @var string
-     */
+    public function setFile($file) { $this->file = $file; return $this; } 
+    public function getFile() { return $this->file; }
+/*********************************************************************************/    
+/* image *************************************************************************/
     private $image;
-
-    /**
-     * @var string
-     */
+    public function setImage($image) { $this->image = $image; return $this; } 
+    public function getImage() { return $this->image; } 
+/*********************************************************************************/    
+/* readed ************************************************************************/
     private $readed;
-
-    /**
-     * @var \DateTime
-     */
+    public function setReaded($readed) { $this->readed = $readed; return $this; } 
+    public function getReaded() { return $this->readed; } 
+/*********************************************************************************/    
+/* createdAt *********************************************************************/
     private $createdAt;
-
-    /**
-     * @var \BackendBundle\Entity\User
-     */
+    public function setCreatedAt($createdAt) { $this->createdAt = $createdAt; return $this; } 
+    public function getCreatedAt() { return $this->createdAt; } 
+/*********************************************************************************/    
+/* emitter ***********************************************************************/
     private $emitter;
-
-    /**
-     * @var \BackendBundle\Entity\User
-     */
+    public function setEmitter(\BackendBundle\Entity\User $emitter = null) { $this->emitter = $emitter; return $this; } 
+    public function getEmitter() { return $this->emitter; } 
+/*********************************************************************************/    
+/* receiver **********************************************************************/
     private $receiver;
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set message
-     *
-     * @param string $message
-     *
-     * @return PrivateMessage
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * Get message
-     *
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * Set file
-     *
-     * @param string $file
-     *
-     * @return PrivateMessage
-     */
-    public function setFile($file)
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
-    /**
-     * Get file
-     *
-     * @return string
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * Set image
-     *
-     * @param string $image
-     *
-     * @return PrivateMessage
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * Set readed
-     *
-     * @param string $readed
-     *
-     * @return PrivateMessage
-     */
-    public function setReaded($readed)
-    {
-        $this->readed = $readed;
-
-        return $this;
-    }
-
-    /**
-     * Get readed
-     *
-     * @return string
-     */
-    public function getReaded()
-    {
-        return $this->readed;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return PrivateMessage
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set emitter
-     *
-     * @param \BackendBundle\Entity\User $emitter
-     *
-     * @return PrivateMessage
-     */
-    public function setEmitter(\BackendBundle\Entity\User $emitter = null)
-    {
-        $this->emitter = $emitter;
-
-        return $this;
-    }
-
-    /**
-     * Get emitter
-     *
-     * @return \BackendBundle\Entity\User
-     */
-    public function getEmitter()
-    {
-        return $this->emitter;
-    }
-
-    /**
-     * Set receiver
-     *
-     * @param \BackendBundle\Entity\User $receiver
-     *
-     * @return PrivateMessage
-     */
-    public function setReceiver(\BackendBundle\Entity\User $receiver = null)
-    {
-        $this->receiver = $receiver;
-
-        return $this;
-    }
-
-    /**
-     * Get receiver
-     *
-     * @return \BackendBundle\Entity\User
-     */
-    public function getReceiver()
-    {
-        return $this->receiver;
-    }
+    public function setReceiver(\BackendBundle\Entity\User $receiver = null) { $this->receiver = $receiver; return $this; } 
+    public function getReceiver() { return $this->receiver; }
+/*********************************************************************************/ 
 }
 

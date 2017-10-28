@@ -2,199 +2,40 @@
 
 namespace BackendBundle\Entity;
 
-/**
- * Notification
- */
-class Notification
-{
-    /**
-     * @var integer
-     */
+class Notification { 
+/* Id de la Tabla ****************************************************************/    
     private $id;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var integer
-     */
-    private $typeId;
-
-    /**
-     * @var string
-     */
-    private $readed;
-
-    /**
-     * @var \DateTime
-     */
-    private $createdAt;
-
-    /**
-     * @var string
-     */
-    private $extra;
-
-    /**
-     * @var \BackendBundle\Entity\User
-     */
-    private $user;
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     *
-     * @return Notification
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set typeId
-     *
-     * @param integer $typeId
-     *
-     * @return Notification
-     */
-    public function setTypeId($typeId)
-    {
-        $this->typeId = $typeId;
-
-        return $this;
-    }
-
-    /**
-     * Get typeId
-     *
-     * @return integer
-     */
-    public function getTypeId()
-    {
-        return $this->typeId;
-    }
-
-    /**
-     * Set readed
-     *
-     * @param string $readed
-     *
-     * @return Notification
-     */
-    public function setReaded($readed)
-    {
-        $this->readed = $readed;
-
-        return $this;
-    }
-
-    /**
-     * Get readed
-     *
-     * @return string
-     */
-    public function getReaded()
-    {
-        return $this->readed;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return Notification
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set extra
-     *
-     * @param string $extra
-     *
-     * @return Notification
-     */
-    public function setExtra($extra)
-    {
-        $this->extra = $extra;
-
-        return $this;
-    }
-
-    /**
-     * Get extra
-     *
-     * @return string
-     */
-    public function getExtra()
-    {
-        return $this->extra;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \BackendBundle\Entity\User $user
-     *
-     * @return Notification
-     */
-    public function setUser(\BackendBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \BackendBundle\Entity\User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
+    public function getId() { return $this->id; }
+/*********************************************************************************/    
+/* mtype *************************************************************************/ 
+    private $type; 
+    public function setType($type) { $this->type = $type; return $this; } 
+    public function getType() { return $this->type; } 
+/*********************************************************************************/    
+/* typeId ************************************************************************/ 
+    private $typeId; 
+    public function setTypeId($typeId) { $this->typeId = $typeId; return $this; } 
+    public function getTypeId() { return $this->typeId; } 
+/*********************************************************************************/    
+/* readed ************************************************************************/ 
+    private $readed; 
+    public function setReaded($readed) { $this->readed = $readed; return $this; } 
+    public function getReaded() { return $this->readed; } 
+/*********************************************************************************/    
+/* createdAt *********************************************************************/ 
+    private $createdAt; 
+    public function setCreatedAt($createdAt) { $this->createdAt = $createdAt; return $this; } 
+    public function getCreatedAt() { return $this->createdAt; } 
+/*********************************************************************************/    
+/* extra *************************************************************************/ 
+    private $extra; 
+    public function setExtra($extra) { $this->extra = $extra; return $this; } 
+    public function getExtra() { return $this->extra; } 
+/*********************************************************************************/    
+/* user **************************************************************************/ 
+    private $user; 
+    public function setUser(\BackendBundle\Entity\User $user = null) { $this->user = $user; return $this; } 
+    public function getUser() { return $this->user; }
+/*********************************************************************************/  
 }
 
