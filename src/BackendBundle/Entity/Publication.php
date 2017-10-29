@@ -33,6 +33,11 @@ class Publication {
     public function getCreatedAt() { return $this->createdAt; } 
 /*********************************************************************************/    
 /* user **************************************************************************/ 
+    /* 
+     * Añadiremos la función __toString(){ return $this->name;  } dentro de 
+     * src\BackendBundle\Entity\User.php, y permite 
+     * listar los campos cuando referenciemos la tabla
+     */
     private $user; 
     public function setUser(\BackendBundle\Entity\User $user = null) { $this->user = $user; return $this; }
     public function getUser() { return $this->user; }

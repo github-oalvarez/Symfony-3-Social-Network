@@ -43,7 +43,8 @@ class PrivateMessageType extends AbstractType{
          * getFollowingUsers($user)
          */
 				'query_builder' => function($er) use($user){
-					return $er->getFollowingUsers($user);
+				//	return $er->screateQueryBuilder('u'); // Sacar todos los usuarios
+          return $er->getFollowingUsers($user);
 				},
 				'choice_label' => function($user){
           // mostrará dentro de las opciones la siguiente información....

@@ -58,7 +58,7 @@ class User implements UserInterface, \Serializable {
     public function setActive($active) { $this->active = $active; return $this; }
     public function getActive() { return $this->active; }
 /*********************************************************************************/    
-/* pimage ************************************************************************/
+/* image *************************************************************************/
     private $image;
     public function setImage($image) {  $this->image = $image; return $this; } 
     public function getImage() { return $this->image; }

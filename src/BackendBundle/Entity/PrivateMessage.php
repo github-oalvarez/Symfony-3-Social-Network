@@ -33,11 +33,21 @@ class PrivateMessage {
     public function getCreatedAt() { return $this->createdAt; } 
 /*********************************************************************************/    
 /* emitter ***********************************************************************/
+    /* 
+     * Añadiremos la función __toString(){ return $this->name;  } dentro de 
+     * src\BackendBundle\Entity\User.php, y permite 
+     * listar los campos cuando referenciemos la tabla
+     */
     private $emitter;
     public function setEmitter(\BackendBundle\Entity\User $emitter = null) { $this->emitter = $emitter; return $this; } 
     public function getEmitter() { return $this->emitter; } 
 /*********************************************************************************/    
 /* receiver **********************************************************************/
+    /* 
+     * Añadiremos la función __toString(){ return $this->name;  } dentro de 
+     * src\BackendBundle\Entity\User.php, y permite 
+     * listar los campos cuando referenciemos la tabla
+     */
     private $receiver;
     public function setReceiver(\BackendBundle\Entity\User $receiver = null) { $this->receiver = $receiver; return $this; } 
     public function getReceiver() { return $this->receiver; }
