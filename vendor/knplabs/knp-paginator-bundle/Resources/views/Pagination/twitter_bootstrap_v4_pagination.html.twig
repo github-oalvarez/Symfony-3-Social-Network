@@ -1,17 +1,19 @@
 {#
 /**
  * @file
- * Twitter Bootstrap v4-alpha.6 Sliding pagination control implementation.
+ * Twitter Bootstrap v4-beta.2 Sliding pagination control implementation.
  *
  * View that can be used with the pagination module
  * from the Twitter Bootstrap CSS Toolkit
- * https://v4-alpha.getbootstrap.com/components/pagination/
+ * https://getbootstrap.com/docs/4.0/components/pagination/
  *
  */
 #}
 {% if pageCount > 1 %}
     <nav>
-        <ul class="pagination">
+        {% set classAlign = (align is not defined) ? '' : align=='center' ? ' justify-content-center' : (align=='right' ? ' justify-content-end' : '') %}
+        {% set classSize = (size is not defined) ? '' : size=='large' ? ' pagination-lg' : (size=='small' ? ' pagination-sm' : '') %}
+        <ul class="pagination{{ classAlign }}{{ classSize }}">
 
             {% if previous is defined %}
                 <li class="page-item">

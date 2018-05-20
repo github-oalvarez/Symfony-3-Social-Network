@@ -68,7 +68,7 @@ class XmlUtils
         libxml_disable_entity_loader($disableEntities);
 
         foreach ($dom->childNodes as $child) {
-            if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
+            if (XML_DOCUMENT_TYPE_NODE === $child->nodeType) {
                 throw new \InvalidArgumentException('Document types are not allowed.');
             }
         }
@@ -109,7 +109,7 @@ class XmlUtils
     }
 
     /**
-     * Converts a \DomElement object to a PHP array.
+     * Converts a \DOMElement object to a PHP array.
      *
      * The following rules applies during the conversion:
      *
@@ -123,7 +123,7 @@ class XmlUtils
      *
      *  * The nested-tags are converted to keys (<foo><foo>bar</foo></foo>)
      *
-     * @param \DomElement $element     A \DomElement instance
+     * @param \DOMElement $element     A \DOMElement instance
      * @param bool        $checkPrefix Check prefix in an element or an attribute name
      *
      * @return array A PHP array

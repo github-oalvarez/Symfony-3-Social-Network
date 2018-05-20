@@ -5,18 +5,27 @@ namespace Knp\Component\Pager\Event\Subscriber\Sortable\Doctrine\ODM\MongoDB;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Knp\Component\Pager\Event\ItemsEvent;
 use Doctrine\ODM\MongoDB\Query\Query;
+use Knp\Component\Pager\PaginatorInterface;
 
 class QuerySubscriber implements EventSubscriberInterface
 {
     public function items(ItemsEvent $event)
     {
-        if ($event->target instanceof Query) {
-            if (isset($_GET[$event->options['sortFieldParameterName']])) {
-                $field = $_GET[$event->options['sortFieldParameterName']];
-                $dir = strtolower($_GET[$event->options['sortDirectionParameterName']]) == 'asc' ? 1 : -1;
+        // Check if the result has already been sorted by an other sort subscriber
+        $customPaginationParameters = $event->getCustomPaginationParameters();
+        if (!empty($customPaginationParameters['sorted']) ) {
+            return;
+        }
 
-                if (isset($event->options['sortFieldWhitelist'])) {
-                    if (!in_array($field, $event->options['sortFieldWhitelist'])) {
+        if ($event->target instanceof Query) {
+            $event->setCustomPaginationParameter('sorted', true);
+
+            if (isset($_GET[$event->options[PaginatorInterface::SORT_FIELD_PARAMETER_NAME]])) {
+                $field = $_GET[$event->options[PaginatorInterface::SORT_FIELD_PARAMETER_NAME]];
+                $dir = strtolower($_GET[$event->options[PaginatorInterface::SORT_DIRECTION_PARAMETER_NAME]]) == 'asc' ? 1 : -1;
+
+                if (isset($event->options[PaginatorInterface::SORT_FIELD_WHITELIST])) {
+                    if (!in_array($field, $event->options[PaginatorInterface::SORT_FIELD_WHITELIST])) {
                         throw new \UnexpectedValueException("Cannot sort by: [{$field}] this field is not in whitelist");
                     }
                 }

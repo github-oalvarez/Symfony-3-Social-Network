@@ -66,7 +66,6 @@ body{
 
 /* HOME */
 #timeline{
-    margin-right: 20px;
     min-height: 750px;
     padding-bottom: 20px;
 }
@@ -80,7 +79,6 @@ body{
 
 #user-card{
     padding: 10px;
-    margin-bottom: 20px;
 }
 
 #user-card .avatar{

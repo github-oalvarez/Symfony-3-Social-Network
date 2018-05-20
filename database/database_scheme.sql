@@ -1,5 +1,5 @@
 -- si la base de datos no existe la crearemos
-CREATE DATABASE IF NOT EXISTS curso_social_network;
+CREATE DATABASE IF NOT EXISTS symfony-3-social-network;
 USE curso_social_network;
 -- creamos la tabla 'users'
 

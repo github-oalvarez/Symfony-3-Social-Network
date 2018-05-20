@@ -84,19 +84,30 @@ class Processor
             'translationCount' => null,
         ), $options);
 
+
+        $hasFixedDirection = $pagination->getPaginatorOption('sortDirectionParameterName') !== null
+            && isset($params[$pagination->getPaginatorOption('sortDirectionParameterName')])
+        ;
+
         $params = array_merge($pagination->getParams(), $params);
 
-        $direction = isset($options[$pagination->getPaginatorOption('sortDirectionParameterName')])
-            ? $options[$pagination->getPaginatorOption('sortDirectionParameterName')]
-            : (isset($options['defaultDirection']) ? $options['defaultDirection'] : 'asc')
-        ;
+        $direction = isset($options['defaultDirection']) ? $options['defaultDirection'] : 'asc';
+        if ($pagination->getPaginatorOption('sortDirectionParameterName') !== null) {
+            if (isset($params[$pagination->getPaginatorOption('sortDirectionParameterName')])) {
+                $direction = $params[$pagination->getPaginatorOption('sortDirectionParameterName')];
+            } elseif (isset($options[$pagination->getPaginatorOption('sortDirectionParameterName')])) {
+                $direction = $options[$pagination->getPaginatorOption('sortDirectionParameterName')];
+            }
+        }
 
         $sorted = $pagination->isSorted($key, $params);
 
         if ($sorted) {
-            $direction = $params[$pagination->getPaginatorOption('sortDirectionParameterName')];
-            $direction = (strtolower($direction) == 'asc') ? 'desc' : 'asc';
-            $class = $direction == 'asc' ? 'desc' : 'asc';
+            if (!$hasFixedDirection) {
+                $direction = strtolower($direction) === 'asc' ? 'desc' : 'asc';
+            }
+
+            $class = $direction === 'asc' ? 'desc' : 'asc';
         } else {
             $class = 'sortable';
         }

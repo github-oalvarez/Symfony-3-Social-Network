@@ -83,6 +83,8 @@ If you need custom parameters in pagination template, use:
 <?php
 // set an array of custom parameters
 $pagination->setCustomParameters(array(
+    'align' => 'center', # center|right (for template: twitter_bootstrap_v4_pagination)
+    'size' => 'large', # small|large (for template: twitter_bootstrap_v4_pagination)
     'style' => 'bottom',
     'span_class' => 'whatever'
 ));
@@ -109,8 +111,8 @@ The `knp_pagination_sortable()` template switch automatically the sorting direct
 You can add an array at the end of `knp_pagination_sortable()` to choose the direction.
 
 ``` html
-{{ knp_pagination_sortable(pagination, 'Title A-Z', 'a.title', {'direction': 'asc'}) }}
-{{ knp_pagination_sortable(pagination, 'Title Z-A', 'a.title', {'direction': 'desc'}) }}
+{{ knp_pagination_sortable(pagination, 'Title A-Z', 'a.title', {}, {'direction': 'asc'}) }}
+{{ knp_pagination_sortable(pagination, 'Title Z-A', 'a.title', {}, {'direction': 'desc'}) }}
 ```
 (Assuming you use the default configuration value of sort_direction_name)
 
@@ -135,3 +137,46 @@ $pagination = $paginator->paginate(
 );
 ```
 
+Or even in Twig:
+
+```jinja
+    {{ knp_pagination_render(
+            pagination,
+            '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig',
+            {
+                'queryParam1': 'param1 value',
+                'queryParam2': 'param2 value'
+            },
+            {
+                'viewParam1': 'param1 value',
+                'viewParam2': 'param2 value'
+            },
+        ) }}
+```
+
+## Customize rendering
+
+### Bulma
+
+You can configure the position, the size, and make the buttons rounded or not:
+- `position`: `'left'`, `'centered'`, or `'right'`. By default it's `'left'` 
+- `size`: `'small'`, `'medium'`, or `'large'`. By default, size is not modified
+- `rounded`: `true` or `false`. By default it's `false`
+
+In your controller:
+```php
+$pagination->setCustomParameters([
+    'position' => 'centered',
+    'size' => 'large',
+    'rounded' => true,
+]);
+```
+
+or in the view:
+```twig
+{{ knp_pagination_render(pagination, null, {}, {
+   'position': 'centered',
+   'size': 'large'
+   'rounded': true,
+}) }}
+```

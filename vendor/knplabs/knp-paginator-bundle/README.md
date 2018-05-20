@@ -1,6 +1,6 @@
 # Intro to KnpPaginatorBundle
 
-**SEO** friendly Symfony2 paginator to paginate everything
+**SEO** friendly Symfony paginator to paginate everything
 
 [![Build Status](https://travis-ci.org/KnpLabs/KnpPaginatorBundle.svg?branch=master)](https://travis-ci.org/KnpLabs/KnpPaginatorBundle)
 
@@ -23,7 +23,7 @@ chapter of documentation.
 ## Requirements:
 
 - Knp pager component `>=1.1`
-- KnpPaginatorBundle's master compatible with symfony (`>=2.0` versions).
+- KnpPaginatorBundle's master compatible with symfony (`>=2.7` versions).
 - Twig`>=1.5` version is required if you use twig templating engine
 
 ## Features:
@@ -35,8 +35,7 @@ chapter of documentation.
 pagination view - for representation purposes.
 
 **Note:** using multiple paginators requires setting the **alias** in order to keep non
-conflicting parameters. Also it gets quite complicated with a twig template, since hash arrays cannot use
-variables as keys.
+conflicting parameters.
 
 ## More detailed documentation:
 
@@ -74,23 +73,29 @@ You can configure default query parameter names and templates
 
 ```yaml
 knp_paginator:
-    page_range: 5                      # default page range used in pagination control
-    default_options:
-        page_name: page                # page query parameter name
-        sort_field_name: sort          # sort field query parameter name
-        sort_direction_name: direction # sort direction query parameter name
-        distinct: true                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
-    template:
-        pagination: 'KnpPaginatorBundle:Pagination:sliding.html.twig'     # sliding pagination controls template
-        sortable: 'KnpPaginatorBundle:Pagination:sortable_link.html.twig' # sort link template
+    page_range: 5                       # number of links showed in the pagination menu (e.g: you have 10 pages, a page_range of 3, on the 5th page you'll see links to page 4, 5, 6)
+    default_options:                                 
+        page_name: page                 # page query parameter name
+        sort_field_name: sort           # sort field query parameter name
+        sort_direction_name: direction  # sort direction query parameter name
+        distinct: true                  # ensure distinct results, useful when ORM queries are using GROUP BY statements
+        filter_field_name: filterField  # filter field query parameter name
+        filter_value_name: filterValue  # filter value query parameter name
+    template:                                        
+        pagination: '@KnpPaginator/Pagination/sliding.html.twig'     # sliding pagination controls template                                    
+        sortable: '@KnpPaginator/Pagination/sortable_link.html.twig' # sort link template                                
+        filtration: '@KnpPaginator/Pagination/filtration.html.twig'  # filters template
 ```
 
 There are a few additional pagination templates, that could be used out of the box in `knp_paginator.template.pagination` key:
 
-* `KnpPaginatorBundle:Pagination:sliding.html.twig` (by default)
-* `KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig`
-* `KnpPaginatorBundle:Pagination:twitter_bootstrap_pagination.html.twig`
-* `KnpPaginatorBundle:Pagination:foundation_v5_pagination.html.twig`
+* `@KnpPaginator/Pagination/sliding.html.twig` (by default)
+* `@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig`
+* `@KnpPaginator/Pagination/twitter_bootstrap_v3_pagination.html.twig`
+* `@KnpPaginator/Pagination/twitter_bootstrap_pagination.html.twig`
+* `@KnpPaginator/Pagination/foundation_v5_pagination.html.twig`
+* `@KnpPaginator/Pagination/bulma_pagination.html.twig`
+* `@KnpPaginator/Pagination/semantic_ui_pagination.html.twig`
 
 
 ## Usage examples:
@@ -191,6 +196,12 @@ It defaults to ```knp_paginator```.
 The class that receives the KnpPaginator service must implement ```Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface```.
 If you're too lazy you can also just extend the ```Knp\Bundle\PaginatorBundle\Definition\PaginatorAware``` base class.
 
+#### Lazy service
+
+The `knp_paginator` service will be created lazily if the package `ocramius/proxy-manager` is installed.
+
+For more information about lazy services, consult the [Symfony documentation on dependency injection](https://symfony.com/doc/current/service_container/lazy_services.html).
+
 ###### XML configuration example
 
 ```xml
@@ -215,3 +226,26 @@ If you're too lazy you can also just extend the ```Knp\Bundle\PaginatorBundle\De
 [knp_component_pager]: https://github.com/KnpLabs/knp-components/blob/master/doc/pager/intro.md "Knp Pager component introduction"
 [doc_custom_pagination_subscriber]: https://github.com/KnpLabs/KnpPaginatorBundle/tree/master/Resources/doc/custom_pagination_subscribers.md "Custom pagination subscribers"
 [doc_templates]: https://github.com/KnpLabs/KnpPaginatorBundle/tree/master/Resources/doc/templates.md "Customizing Pagination templates"
+
+## Troubleshooting
+
+- Make sure the translator is activated in your symfony config :
+ 
+```yaml
+framework:
+    translator: { fallbacks: ['%locale%'] }
+```
+
+- If your locale is not available, create your own translation file in
+`app/Resources/translations/KnpPaginatorBundle.en.yml` (substitute en for your own language code if needed)
+. Then add these lines:
+
+```yaml
+label_next: Next
+label_previous: Previous
+```
+
+## Maintainers
+
+- [@NiR-](https://github.com/NiR-)
+- [@nicolasmure](https://github.com/nicolasmure)

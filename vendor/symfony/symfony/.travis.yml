@@ -25,9 +25,10 @@ matrix:
           group: edge
         - php: 5.5
         - php: 5.6
-        - php: 7.0.8
-          env: deps=high
+        - php: 7.0
         - php: 7.1
+          env: deps=high
+        - php: 7.2
           env: deps=low
     fast_finish: true
 
@@ -128,11 +129,6 @@ before_install:
 
     - |
       # Install extra PHP extensions
-      if [[ ! $skip && $PHP = 7.0.* ]]; then
-          wget https://github.com/symfony/binary-utils/releases/download/v0.1/ldap-php70.tar.bz2
-          tar -xjf ldap-php70.tar.bz2
-          echo extension = $(pwd)/ldap.so >> $INI
-      fi
       if [[ ! $skip && $PHP = 5.* ]]; then
           ([[ $deps ]] || tfold ext.symfony_debug 'cd src/Symfony/Component/Debug/Resources/ext && phpize && ./configure && make && echo extension = $(pwd)/modules/symfony_debug.so >> '"$INI") &&
           tfold ext.apcu4 'echo yes | pecl install -f apcu-4.0.11'
@@ -199,7 +195,7 @@ install:
           elif [[ $deps = low ]]; then
               echo "$COMPONENTS" | parallel --gnu -j10% "tfold {} 'cd {} && $COMPOSER_UP --prefer-lowest --prefer-stable && $PHPUNIT_X'"
           elif [[ $PHP = hhvm* ]]; then
-              $PHPUNIT --exclude-group benchmark,intl-data
+              $PHPUNIT --exclude-group no-hhvm,benchmark,intl-data
           else
               echo "$COMPONENTS" | parallel --gnu "tfold {} $PHPUNIT_X {}"
               tfold tty-group $PHPUNIT --group tty

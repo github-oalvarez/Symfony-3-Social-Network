@@ -42,7 +42,7 @@ trait MemcachedTrait
         if (!static::isSupported()) {
             throw new CacheException('Memcached >= 2.2.0 is required');
         }
-        if (get_class($client) === 'Memcached') {
+        if ('Memcached' === get_class($client)) {
             $opt = $client->getOption(\Memcached::OPT_SERIALIZER);
             if (\Memcached::SERIALIZER_PHP !== $opt && \Memcached::SERIALIZER_IGBINARY !== $opt) {
                 throw new CacheException('MemcachedAdapter: "serializer" option must be "php" or "igbinary".');
@@ -71,7 +71,7 @@ trait MemcachedTrait
      *
      * @return \Memcached
      *
-     * @throws \ErrorEception When invalid options or servers are provided
+     * @throws \ErrorException When invalid options or servers are provided
      */
     public static function createConnection($servers, array $options = array())
     {

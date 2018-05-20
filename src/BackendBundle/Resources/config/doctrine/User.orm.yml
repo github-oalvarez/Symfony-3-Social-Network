@@ -27,11 +27,11 @@ BackendBundle\Entity\User:
                 strategy: IDENTITY
     fields:
         role:
-            type: string
-            nullable: true
-            length: 20
+            type: json_array
+            nullable: false
+            length: null
             options:
-                fixed: false
+                fixed: false 
         email:
             type: string
             nullable: true

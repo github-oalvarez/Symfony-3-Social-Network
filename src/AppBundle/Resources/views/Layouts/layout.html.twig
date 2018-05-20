@@ -2,45 +2,33 @@
 <html lang="es">
   <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} SF3 NETWORK {% endblock %}</title>
     {% block stylesheets %}
       <link href="{{ asset ('assets/bootstrap/css/bootstrap.min.css')}}" type="text/css" rel="stylesheet">
       <link href="{{ asset ('assets/css/bootstrap.cosmo.min.css')}}" type="text/css" rel="stylesheet">
       <link href="{{ asset ('assets/css/styles.css')}}" type="text/css" rel="stylesheet">
     {% endblock %}
-    {% block javascripts %}
-      {# JAVASCRIPT PARA OBTENER LA URL.............................................. #}
-        <script type="text/javascript">
-            //var URL = "{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php";
-            var URL = "{{ app.request.getSchemeAndHttpHost() }}";
-        </script>
-      {# ..............................................JAVASCRIPT PARA OBTENER LA URL #}
-      <script src="{{ asset ('assets/js/jquery.min.js')}}"></script>
-      <script src="{{ asset ('assets/bootstrap/js/bootstrap.min.js')}}"></script>
-      {# SCRIPT QUE PERMITE USAR EL SCROLL INFINITO DE CARGA DE UN LISTADO........... #}
-        <script src="{{ asset ('assets/js/jquery-ias.min.js')}}"></script>
-      {# ...........SCRIPT QUE PERMITE USAR EL SCROLL INFINITO DE CARGA DE UN LISTADO #}
-      {# JAVASCRIPT PARA GESTIONAR LAS NOTIFICACIONES................................ #}
-        <script type="text/javascript" src="{{ asset('assets/js/custom/common.js') }}"></script>
-      {# ................................JAVASCRIPT PARA GESTIONAR LAS NOTIFICACIONES #}
-    {% endblock %}
   </head>
   <body>
     <header>
       <nav class="navbar navbar-inverse">
         <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
           <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
               <span class="sr-only">NAVEGACIÓN</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="{{path("home_publication")}}">
-            <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
+              <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span>
               NETWORK
             </a>
           </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
               {# EVITAMOS QUE SE VEA ESTA PARTE DEL MENÚ CUANDO NO ESTAMOS LOGUEADOS. #}
@@ -98,7 +86,6 @@
                     <a href="{{path("private_message_index")}}">
                       <span class="glyphicon glyphicon-envelope" aria-hidden="true">
                       </span>
-                      &nbsp;Mensajes Privados
                       {# MOSTRAMOS EL NÚMERO DE NOTIFICACIONES PENDIENTES DE LEER.... #}
                         <span class="label label-success label-notifications-msg">
                           <!-- NO IMPORTA EL TEXTO QUE METAMOS EL JAVASCRIPT LO SUSTITUIRÁ -->
@@ -110,7 +97,6 @@
                     <a href="{{path("notifications_page")}}">
                       <span class="glyphicon glyphicon-bell" aria-hidden="true">
                       </span>
-                      &nbsp;Notificaciones
                       {# MOSTRAMOS EL NÚMERO DE NOTIFICACIONES PENDIENTES DE LEER.... #}
                         <span class="label label-success label-notifications">
                           <!-- NO IMPORTA EL TEXTO QUE METAMOS EL JAVASCRIPT LO SUSTITUIRÁ -->
@@ -153,9 +139,9 @@
                   </li>
                 </ul>
               {% endif %}
-            {# ......EVITAMOS QUE SE VEA ESTA PARTE DEL MENÚ CUANDO ESTAMOS LOGUEADOS #}
-          </div>
-        </div>
+            {# ......EVITAMOS QUE SE VEA ESTA PARTE DEL MENÚ CUANDO ESTAMOS LOGUEADOS #}      
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
       </nav>
     </header>
     <section id="content">
@@ -171,11 +157,27 @@
       {# ......................................................MOSTRAMOS LOS FLASHBAG #}
       {% block content %}{% endblock%}
     </section>
+    <hr>
+    <!--
     <footer class="col-lg-12">
       <hr/>
-      <div class="container">
-        <p class="text-muted">SF3 NETWORK </p>
-      </div>
+      <div class="container">SF3 NETWORK</div>
     </footer>
-  </body>
+    -->
+    {% block javascripts %}
+      {# JAVASCRIPT PARA OBTENER LA URL.............................................. #}
+        <script type="text/javascript">
+            //var URL = "{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php";
+            var URL = "{{ app.request.getSchemeAndHttpHost() }}";
+        </script>
+      {# ..............................................JAVASCRIPT PARA OBTENER LA URL #}
+      <script src="{{ asset ('assets/js/jquery.min.js')}}"></script>
+      <script src="{{ asset ('assets/bootstrap/js/bootstrap.min.js')}}"></script>
+      {# SCRIPT QUE PERMITE USAR EL SCROLL INFINITO DE CARGA DE UN LISTADO........... #}
+        <script src="{{ asset ('assets/js/jquery-ias.min.js')}}"></script>
+      {# ...........SCRIPT QUE PERMITE USAR EL SCROLL INFINITO DE CARGA DE UN LISTADO #}
+      {# JAVASCRIPT PARA GESTIONAR LAS NOTIFICACIONES................................ #}
+        <script type="text/javascript" src="{{ asset('assets/js/custom/common.js') }}"></script>
+      {# ................................JAVASCRIPT PARA GESTIONAR LAS NOTIFICACIONES #}
+    {% endblock %}  </body>
 </html>

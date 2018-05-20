@@ -2,6 +2,7 @@
 
 namespace Knp\Component\Pager\Event\Subscriber\Paginate\Doctrine\ORM;
 
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Doctrine\ORM\Query\Parameter;
 use Knp\Component\Pager\Event\ItemsEvent;
@@ -53,12 +54,12 @@ class QuerySubscriber implements EventSubscriberInterface
                 if ($useDoctrineWalkers) {
                     $countQuery->setHint(
                         DoctrineCountWalker::HINT_DISTINCT,
-                        $event->options['distinct']
+                        $event->options[PaginatorInterface::DISTINCT]
                     );
                 } else {
                     $countQuery->setHint(
                         CountWalker::HINT_DISTINCT,
-                        $event->options['distinct']
+                        $event->options[PaginatorInterface::DISTINCT]
                     );
                 }
                 $countQuery
@@ -75,7 +76,7 @@ class QuerySubscriber implements EventSubscriberInterface
             // process items
             $result = null;
             if ($event->count) {
-                if ($event->options['distinct']) {
+                if ($event->options[PaginatorInterface::DISTINCT]) {
                     $limitSubQuery = QueryHelper::cloneQuery($event->target);
                     $limitSubQuery
                         ->setFirstResult($event->getOffset())

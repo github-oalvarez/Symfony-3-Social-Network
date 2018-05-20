@@ -122,7 +122,7 @@ class PrivateMessageController extends Controller {
 		return $this->render('AppBundle:PrivateMessage:index.html.twig', array(
         // Pasamos el formulario a la vista
         'form' => $form->createView(),
-			  'pagination' => $private_messages
+			  'pagination'=>$private_messages
 		));
 	}
 /***************************************************************************************************/
